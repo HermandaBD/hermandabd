@@ -59,7 +59,7 @@ DJOSER = {
     "USER_ID_FIELD": "username",
     "LOGIN_FIELD": "email",
     "SEND_ACTIVATION_EMAIL": True,
-    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "ACTIVATION_URL": "api/v1/users/activation/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "reset_password/{uid}/{token}",
     'SERIALIZERS': {
         'token_create': 'hermandabd.serializers.CustomTokenCreateSerializer', # TODO CREAR
@@ -67,7 +67,7 @@ DJOSER = {
 }
 
 PROTOCOL = "http"
-DOMAIN = "localhost:3000"
+DOMAIN = "localhost:8000"
 if not DEBUG:
     PROTOCOL = "https"
     DOMAIN = "boilerplate.saasitive.com" # TODO CAMBIAR A URL DE PRODUCCIÓN CUANDO LA TENGAMOS
@@ -79,6 +79,12 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 SITE_NAME = "hermandabd"
 
 MIDDLEWARE = [
@@ -146,9 +152,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
@@ -167,4 +173,4 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
