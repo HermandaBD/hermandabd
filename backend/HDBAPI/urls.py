@@ -1,9 +1,12 @@
 from django.contrib import admin
-from django.urls import path
+
+from django.urls import path, include
 from hermandabd.urls import hermandabd_url_patterns
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('', include('homepage.urls')),
+
 ]
 
 urlpatterns += hermandabd_url_patterns
