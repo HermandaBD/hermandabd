@@ -29,7 +29,7 @@ class Hermano(models.Model):
     email = models.EmailField(max_length=254)
     fecha_nacimiento = models.DateField()
     fecha_alta = models.DateField()
-    fecha_baja = models.DateField(null=True)
+    fecha_baja = models.DateField(null=True, blank=True)
     forma_pago = models.CharField(max_length=50)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     iban = models.CharField(max_length=24)
@@ -38,7 +38,7 @@ class Hermano(models.Model):
     provincia = models.CharField(max_length=50)
     telefono = models.CharField(max_length=12)
     titular_cuenta_bancaria = models.CharField(max_length=150)
-    tutor_legal = models.CharField(max_length=150, null=True)
+    tutor_legal = models.CharField(max_length=150, null=True, blank=True)
 
     def __str__(self):
         return self.nombre
