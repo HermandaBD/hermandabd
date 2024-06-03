@@ -98,8 +98,10 @@ class Inventario(models.Model):
 class PapeletaSitio(models.Model):
     nombre_evento = models.CharField(max_length=100)
     ubicacion = models.CharField(max_length=200)
+    puesto = models.CharField(max_length=100)
     valor = models.DecimalField(max_digits=5, decimal_places=2)
     fecha = models.DateField()
+    hora = models.TimeField()
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     hermano = models.ManyToManyField(Hermano)
 
