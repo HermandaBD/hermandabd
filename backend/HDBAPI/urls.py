@@ -5,7 +5,6 @@ from hermandabd.urls import hermandabd_url_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('homepage.urls')),
 
 ]
 

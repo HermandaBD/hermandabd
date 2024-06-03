@@ -8,8 +8,14 @@ import Footer from './components/Footer';
 import './index.css';
 import { LoginPage } from './pages/LoginPage';
 import { MePage } from './pages/MePage';
+<<<<<<< Feat/05-FormHermandad
 import { HermandadFormPage } from './pages/hermandad/HermandadFormPage';
 import { HermandadPage } from './pages/hermandad/HermandadPage';
+=======
+import { HermanoFormPage } from './pages/Hermano/HermanoFormPage';
+import { HermanosPage } from './pages/Hermano/HermanosPage';
+import PrivateRoute from './components/PrivateRoute';
+>>>>>>> develop
 
 function App() {
   return (
@@ -20,9 +26,15 @@ function App() {
           <Routes>
             <Route path='/' element={<MainContent/>} /> {/* Por ahora se deja así pero en verdad se ponen en pages */}
             <Route path='/login' element={<LoginPage />} />
+<<<<<<< Feat/05-FormHermandad
             <Route path='/me' element={<MePage />} />
             <Route path='/hermandad' element={<HermandadFormPage />} />
             <Route path='/hermandades' element={<HermandadPage />} />
+=======
+            <Route path='/me' element={<PrivateRoute element={MePage} />} /> 
+            <Route path='/hermano' element={<PrivateRoute element={HermanoFormPage} />} />
+            <Route path='/hermanos' element={<PrivateRoute element={HermanosPage} />} />
+>>>>>>> develop
           </Routes>
         </main>
         <Footer />
