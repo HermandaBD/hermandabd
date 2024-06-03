@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'corsheaders',
-    'hermandabd',
-    'homepage'
+    'hermandabd'
 ]
 
 REST_FRAMEWORK = {
