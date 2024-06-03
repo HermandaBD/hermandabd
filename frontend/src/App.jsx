@@ -16,6 +16,8 @@ import { EventoFormPage } from './pages/Evento/EventoFormPage';
 import { EventosPage } from './pages/Evento/EventosPage';
 import { PatrimonioFormPage } from './pages/Patrimonio/PatrimonioFormPage.jsx';
 import { PatrimoniosPage } from './pages/Patrimonio/PatrimoniosPage';
+import { InventarioFormPage } from './pages/Inventario/InventarioFormPage.jsx';
+import { InventariosPage } from './pages/Inventario/InventariosPage';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
             <Route path='/eventos' element={<PrivateRoute element={EventosPage} />} />
             <Route path='/patrimonio' element={<PrivateRoute element={PatrimonioFormPage} />} />
             <Route path='/patrimonios' element={<PrivateRoute element={PatrimoniosPage} />} />
+            <Route path='/inventario' element={<PrivateRoute element={InventarioFormPage} />} />
+            <Route path='/inventarios' element={<PrivateRoute element={InventariosPage} />} />
           </Routes>
         </main>
         <Footer />
