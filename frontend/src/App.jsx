@@ -8,6 +8,8 @@ import Footer from './components/Footer';
 import './index.css';
 import { LoginPage } from './pages/LoginPage';
 import { MePage } from './pages/MePage';
+import { HermandadFormPage } from './pages/hermandad/HermandadFormPage';
+import { HermandadPage } from './pages/hermandad/HermandadPage';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path='/' element={<MainContent/>} /> {/* Por ahora se deja así pero en verdad se ponen en pages */}
             <Route path='/login' element={<LoginPage />} />
             <Route path='/me' element={<MePage />} />
+            <Route path='/hermandad' element={<HermandadFormPage />} />
+            <Route path='/hermandades' element={<HermandadPage />} />
           </Routes>
         </main>
         <Footer />
