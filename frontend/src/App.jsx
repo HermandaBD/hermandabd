@@ -22,6 +22,8 @@ import { PapeletaFormPage } from './pages/Papeleta/PapeletaFormPage.jsx';
 import { PapeletasPage } from './pages/Papeleta/PapeletasPage';
 import { CartaFormPage } from './pages/Carta/CartaFormPage.jsx';
 import { CartasPage } from './pages/Carta/CartasPage.jsx';
+import { PagoFormPage } from './pages/Pago/PagoFormPage.jsx';
+import { PagosPage } from './pages/Pago/PagosPage.jsx';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -48,6 +50,8 @@ function App() {
             <Route path='/papeletas' element={<PrivateRoute element={PapeletasPage} />} />
             <Route path='/carta' element={<PrivateRoute element={CartaFormPage} />} />
             <Route path='/cartas' element={<PrivateRoute element={CartasPage} />} />
+            <Route path='/pago' element={<PrivateRoute element={PagoFormPage} />} />
+            <Route path='/pagos' element={<PrivateRoute element={PagosPage} />} />
           </Routes>
         </main>
         <Footer />
