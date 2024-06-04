@@ -114,6 +114,7 @@ class Carta(models.Model):
     cuerpo = models.CharField(max_length=1000)
     fecha_envio = models.DateField()
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
+    destinatarios = models.ManyToManyField(Hermano)
 
     def __str__(self):
         return self.asunto

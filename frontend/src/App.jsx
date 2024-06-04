@@ -20,6 +20,8 @@ import { InventarioFormPage } from './pages/Inventario/InventarioFormPage.jsx';
 import { InventariosPage } from './pages/Inventario/InventariosPage';
 import { PapeletaFormPage } from './pages/Papeleta/PapeletaFormPage.jsx';
 import { PapeletasPage } from './pages/Papeleta/PapeletasPage';
+import { CartaFormPage } from './pages/Carta/CartaFormPage.jsx';
+import { CartasPage } from './pages/Carta/CartasPage.jsx';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -44,6 +46,8 @@ function App() {
             <Route path='/inventarios' element={<PrivateRoute element={InventariosPage} />} />
             <Route path='/papeleta' element={<PrivateRoute element={PapeletaFormPage} />} />
             <Route path='/papeletas' element={<PrivateRoute element={PapeletasPage} />} />
+            <Route path='/carta' element={<PrivateRoute element={CartaFormPage} />} />
+            <Route path='/cartas' element={<PrivateRoute element={CartasPage} />} />
           </Routes>
         </main>
         <Footer />
