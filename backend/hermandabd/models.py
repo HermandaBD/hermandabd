@@ -57,7 +57,7 @@ class Evento(models.Model):
 class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=200)
-    Hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
+    hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nombre
@@ -66,7 +66,7 @@ class Etiqueta(models.Model):
 class Documento(models.Model):
     nombre = models.CharField(max_length=200)
     ruta = models.CharField(max_length=400)
-    Hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
+    hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     etiquetas = models.ManyToManyField(Etiqueta)
 
     def __str__(self):
