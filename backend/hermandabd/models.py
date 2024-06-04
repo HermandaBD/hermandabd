@@ -57,7 +57,7 @@ class Evento(models.Model):
 class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=200)
-    Hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
+    hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nombre
@@ -66,7 +66,7 @@ class Etiqueta(models.Model):
 class Documento(models.Model):
     nombre = models.CharField(max_length=200)
     ruta = models.CharField(max_length=400)
-    Hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
+    hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     etiquetas = models.ManyToManyField(Etiqueta)
 
     def __str__(self):
@@ -98,8 +98,10 @@ class Inventario(models.Model):
 class PapeletaSitio(models.Model):
     nombre_evento = models.CharField(max_length=100)
     ubicacion = models.CharField(max_length=200)
+    puesto = models.CharField(max_length=100)
     valor = models.DecimalField(max_digits=5, decimal_places=2)
     fecha = models.DateField()
+    hora = models.TimeField()
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     hermano = models.ManyToManyField(Hermano)
 
@@ -112,6 +114,7 @@ class Carta(models.Model):
     cuerpo = models.CharField(max_length=1000)
     fecha_envio = models.DateField()
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
+    destinatarios = models.ManyToManyField(Hermano)
 
     def __str__(self):
         return self.asunto

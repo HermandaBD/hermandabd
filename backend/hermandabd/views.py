@@ -9,6 +9,7 @@ from .models import (
     Inventario,
     PapeletaSitio,
     Carta,
+    Pago,
 )
 from .serializers import (
     HermandadSerializer,
@@ -20,6 +21,7 @@ from .serializers import (
     InventarioSerializer,
     PapeletaSitioSerializer,
     CartaSerializer,
+    PagoSerializer,
 )
 
 
@@ -66,3 +68,9 @@ class PapeletaSitioViewSet(viewsets.ModelViewSet):
 class CartaViewSet(viewsets.ModelViewSet):
     queryset = Carta.objects.all()
     serializer_class = CartaSerializer
+
+
+class PagoViewSet(viewsets.ModelViewSet):
+    queryset = Pago.objects.all()
+    serializer_class = PagoSerializer
+
