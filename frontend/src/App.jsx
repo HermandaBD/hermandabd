@@ -26,6 +26,8 @@ import { PagoFormPage } from './pages/Pago/PagoFormPage.jsx';
 import { PagosPage } from './pages/Pago/PagosPage.jsx';
 import { EtiquetaFormPage } from './pages/Etiqueta/EtiquetaFormPage.jsx';
 import { EtiquetasPage } from './pages/Etiqueta/EtiquetasPage.jsx';
+import { DocumentoFormPage } from './pages/Documento/DocumentoFormPage.jsx';
+import { DocumentosPage } from './pages/Documento/DocumentosPage.jsx';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -56,6 +58,8 @@ function App() {
             <Route path='/pagos' element={<PrivateRoute element={PagosPage} />} />
             <Route path='/etiqueta' element={<PrivateRoute element={EtiquetaFormPage} />} />
             <Route path='/etiquetas' element={<PrivateRoute element={EtiquetasPage} />} />
+            <Route path='/documento' element={<PrivateRoute element={DocumentoFormPage} />} />
+            <Route path='/documentos' element={<PrivateRoute element={DocumentosPage} />} />
           </Routes>
         </main>
         <Footer />
