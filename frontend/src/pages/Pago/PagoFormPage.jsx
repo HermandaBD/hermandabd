@@ -113,7 +113,7 @@ export function PagoFormPage() {
                 {errors.hermano && <span>Este campo es obligatorio</span>}
                 
                 <br />
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Pago</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Pago</button>
             </form>
         </div>
     );

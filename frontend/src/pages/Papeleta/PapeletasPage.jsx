@@ -42,6 +42,9 @@ export function PapeletasPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/papeleta')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Papeleta</button>
             
         </div>
     );

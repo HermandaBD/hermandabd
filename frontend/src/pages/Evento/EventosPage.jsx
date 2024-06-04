@@ -42,6 +42,9 @@ export function EventosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/evento')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Evento</button>
             
         </div>
     );

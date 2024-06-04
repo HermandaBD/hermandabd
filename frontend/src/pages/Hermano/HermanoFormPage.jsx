@@ -119,7 +119,7 @@ export function HermanoFormPage() {
                 <input type="text" name="tutor_legal" id="tutor_legal" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
                 {...register('tutor_legal')} />
 
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Hermano</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Hermano</button>
             </form>
         </div>
     );

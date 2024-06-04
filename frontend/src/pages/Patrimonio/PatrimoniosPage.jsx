@@ -42,6 +42,9 @@ export function PatrimoniosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/patrimonio')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Patrimonio</button>
             
         </div>
     );

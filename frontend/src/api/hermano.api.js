@@ -33,4 +33,33 @@ export const getHermanos = async () => {
         console.error("Failed to get Hermanos: ", error);
         throw error;
     }
+};
+
+export const getHermano = async (id) => {
+    try {
+        return await hermanoApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Hermanos: ", error);
+        throw error;
+    }
+};
+
+export const deleteHermano = async (id) => {
+    try {
+        return await hermanoApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete Hermano: ", error);
+        throw error;
+    }
+};
+
+export const updateHermano = async (id, hermano) => {
+    try {
+        return await hermanoApi.put(`/${id}/`, hermano);
+    } catch (error) {
+        console.error("Failed to update Hermano: ", error);
+        throw error;
+    }
+
+
 }

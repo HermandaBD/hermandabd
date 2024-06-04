@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getCartas } from "../../api/carta.api";
 import { CartaList } from "../../components/carta/CartaList";
+import { useNavigate } from "react-router-dom";
+
 
 export function CartasPage() {
     const [cartas, setCartas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -41,6 +44,9 @@ export function CartasPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/carta')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Carta</button>
             
         </div>
     );

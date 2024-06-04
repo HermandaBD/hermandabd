@@ -86,7 +86,7 @@ export function HermandadFormPage() {
                 {errors.telefono && <span>Este campo es obligatorio y debe tener un máximo de 12 caracteres</span>}
                 
                 <br />
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Hermandad</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Hermandad</button>
             </form>
         </div>
     );

@@ -41,6 +41,9 @@ export function HermanosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/hermano')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Hermano</button>
             
         </div>
     );

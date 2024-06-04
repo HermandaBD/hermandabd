@@ -134,7 +134,7 @@ export function PapeletaFormPage() {
                 {errors.hermano && <span>Este campo es obligatorio</span>}
                 
                 <br />
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Papeleta de Sitio</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Papeleta de Sitio</button>
             </form>
         </div>
     );

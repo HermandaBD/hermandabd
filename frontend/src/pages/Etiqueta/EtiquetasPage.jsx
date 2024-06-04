@@ -41,6 +41,9 @@ export function EtiquetasPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/etiqueta')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Etiqueta</button>
             
         </div>
     );

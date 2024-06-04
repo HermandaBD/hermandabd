@@ -33,4 +33,33 @@ export const getEtiquetas = async () => {
         console.error("Failed to get Etiquetas: ", error);
         throw error;
     }
+};
+
+export const getEtiqueta = async (id) => {
+    try {
+        return await etiquetaApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Etiquetas: ", error);
+        throw error;
+    }
+};
+
+export const deleteEtiqueta = async (id) => {
+    try {
+        return await etiquetaApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete Etiqueta: ", error);
+        throw error;
+    }
+};
+
+export const updateEtiqueta = async (id, etiqueta) => {
+    try {
+        return await etiquetaApi.put(`/${id}/`, etiqueta);
+    } catch (error) {
+        console.error("Failed to update Etiqueta: ", error);
+        throw error;
+    }
+
+
 }

@@ -102,7 +102,7 @@ export function PatrimonioFormPage() {
                 {errors.valor && <span>Este campo es obligatorio y debe ser un número entre 0 y 9999999999.99</span>}
                 
                 <br />
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Patrimonio</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Patrimonio</button>
             </form>
         </div>
     );

@@ -70,7 +70,7 @@ export function EtiquetaFormPage() {
                 {errors.hermandad && <span>Este campo es obligatorio</span>}
                 
                 <br />
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Etiqueta</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Etiqueta</button>
             </form>
         </div>
     );

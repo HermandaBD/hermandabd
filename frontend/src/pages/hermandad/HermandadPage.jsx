@@ -41,6 +41,9 @@ export function HermandadPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/hermandad')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Hermandad</button>
             
         </div>
     );
