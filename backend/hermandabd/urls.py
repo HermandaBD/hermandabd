@@ -12,6 +12,7 @@ router.register("patrimonios", PatrimonioViewSet, basename="patrimonios")
 router.register("inventarios", InventarioViewSet, basename="inventarios")
 router.register("papeletasitios", PapeletaSitioViewSet, basename="papeletasitios")
 router.register("cartas", CartaViewSet, basename="cartas")
+router.register("pagos", PagoViewSet, basename="pagos")
 
 hermandabd_url_patterns = [
     path(r"api/v1/", include("djoser.urls")),

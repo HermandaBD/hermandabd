@@ -75,3 +75,8 @@ class CartaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carta
         fields = "__all__"
+
+class PagoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pago
+        fields = "__all__"
