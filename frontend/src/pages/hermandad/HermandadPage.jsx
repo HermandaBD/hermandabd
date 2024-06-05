@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api";
 import { HermandadList } from "../../components/hermandad/HermandadList";
+import { useNavigate } from "react-router-dom";
 
 export function HermandadPage() {
     const [hermandades, setHermandades] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -41,6 +43,9 @@ export function HermandadPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/hermandad')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Hermandad</button>
             
         </div>
     );

@@ -33,4 +33,33 @@ export const getPagos = async () => {
         console.error("Failed to get Pagos: ", error);
         throw error;
     }
+};
+
+export const getPago = async (id) => {
+    try {
+        return await pagoApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Pago: ", error);
+        throw error;
+    }
+};
+
+export const deletePago = async (id) => {
+    try {
+        return await pagoApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete pago: ", error);
+        throw error;
+    }
+};
+
+export const updatePago = async (id, pago) => {
+    try {
+        return await pagoApi.put(`/${id}/`, pago);
+    } catch (error) {
+        console.error("Failed to update Pago: ", error);
+        throw error;
+    }
+
+
 }

@@ -33,4 +33,33 @@ export const getCartas = async () => {
         console.error("Failed to get Cartas: ", error);
         throw error;
     }
+};
+
+export const getCarta = async (id) => {
+    try {
+        return await cartaApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Cartas: ", error);
+        throw error;
+    }
+};
+
+export const deleteCarta = async (id) => {
+    try {
+        return await cartaApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete Carta: ", error);
+        throw error;
+    }
+};
+
+export const updateCarta = async (id, carta) => {
+    try {
+        return await cartaApi.put(`/${id}/`, carta);
+    } catch (error) {
+        console.error("Failed to update Carta: ", error);
+        throw error;
+    }
+
+
 }

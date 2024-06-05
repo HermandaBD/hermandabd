@@ -33,4 +33,33 @@ export const getInventarios = async () => {
         console.error("Failed to get Inventarios: ", error);
         throw error;
     }
+};
+
+export const getInventario = async (id) => {
+    try {
+        return await inventarioApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Inventario: ", error);
+        throw error;
+    }
+};
+
+export const deleteInventario = async (id) => {
+    try {
+        return await inventarioApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete Inventario: ", error);
+        throw error;
+    }
+};
+
+export const updateInventario = async (id, inventario) => {
+    try {
+        return await inventarioApi.put(`/${id}/`, inventario);
+    } catch (error) {
+        console.error("Failed to update Inventario: ", error);
+        throw error;
+    }
+
+
 }

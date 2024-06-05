@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getEventos } from "../../api/evento.api";
 import { EventoList } from "../../components/evento/EventoList";
+import { useNavigate } from "react-router-dom";
 
 export function EventosPage() {
     const [eventos, setEventos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -42,6 +44,9 @@ export function EventosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/evento')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Evento</button>
             
         </div>
     );
