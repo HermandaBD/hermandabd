@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getPatrimonios } from "../../api/patrimonio.api";
 import { PatrimonioList } from "../../components/patrimonio/PatrimonioList";
+import { useNavigate } from "react-router-dom";
 
 export function PatrimoniosPage() {
     const [patrimonios, setPatrimonios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {

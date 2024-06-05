@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { createInventario } from "../../api/inventario.api.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { createInventario, deleteInventario, updateInventario, getInventario } from "../../api/inventario.api.js";
 import { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api.js";
 
 export function InventarioFormPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
+    const params = useParams();
     const [hermandades, setHermandades] = useState([]);
 
     useEffect(() => {
@@ -20,13 +21,33 @@ export function InventarioFormPage() {
 
     const onSubmit = handleSubmit(async data => {
         try {
-            await createInventario(data);
-            console.log("Inventario creado");
-            navigate('/inventarios');
+            if (params.id) {
+                console.log('Actualizando'); //RUD
+                await updateInventario(params.id, data)
+            } else {
+                await createInventario(data);
+                console.log('Crear inventario');
+            }
+            navigate("/inventarios");
         } catch (error) {
             console.error("Error al crear el inventario:", error);
         }
     });
+
+    useEffect(() => { //RUD
+        async function cargarInventario() {
+            if (params.id) {
+                const {data} = await getInventario(params.id)
+                
+                setValue('nombre', data.nombre)
+                setValue('descripcion', data.descripcion)
+                setValue('ubicacion', data.ubicacion)
+                setValue('hermandad', data.hermandad)
+
+            }
+        }
+        cargarInventario();
+    }, [])
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -83,6 +104,13 @@ export function InventarioFormPage() {
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Inventario</button>
             </form>
+            {params.id && <button onClick={async () => {
+                const accepted = window.confirm('¿Estás seguro?')
+                if (accepted) {
+                    await deleteInventario(params.id);
+                    navigate("/inventarios");
+                }
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>} 
         </div>
     );
 }

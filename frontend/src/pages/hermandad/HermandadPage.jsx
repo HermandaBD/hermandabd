@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api";
 import { HermandadList } from "../../components/hermandad/HermandadList";
+import { useNavigate } from "react-router-dom";
 
 export function HermandadPage() {
     const [hermandades, setHermandades] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {

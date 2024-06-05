@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getHermanos } from "../../api/hermano.api";
 import { HermanoList } from "../../components/hermano/HermanoList";
+import { useNavigate } from "react-router-dom";
+
 export function HermanosPage() {
     const [hermanos, setHermanos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {

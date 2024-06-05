@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getInventarios } from "../../api/inventario.api";
 import { InventarioList } from "../../components/inventario/InventarioList";
+import { useNavigate } from "react-router-dom";
+
 
 export function InventariosPage() {
     const [inventarios, setInventarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {

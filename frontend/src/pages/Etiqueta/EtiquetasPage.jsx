@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getEtiquetas } from "../../api/etiqueta.api";
 import { EtiquetaList } from "../../components/etiqueta/EtiquetaList";
+import { useNavigate } from "react-router-dom";
 
 export function EtiquetasPage() {
     const [etiquetas, setEtiquetas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {

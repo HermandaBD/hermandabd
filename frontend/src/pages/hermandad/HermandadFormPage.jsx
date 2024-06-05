@@ -1,20 +1,43 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { createHermandad } from "../../api/hermandad.api" 
+import { useNavigate, useParams } from "react-router-dom";
+import { createHermandad, deleteHermandad, updateHermandad, getHermandad } from "../../api/hermandad.api"
+import { useEffect } from "react"; 
 
 export function HermandadFormPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
+    const params = useParams();
 
     const onSubmit = handleSubmit(async data => {
         try {
-            await createHermandad(data);
-            console.log("Hermandad creada");
-            navigate('/hermandades'); 
+            if (params.id) {
+                console.log('Actualizando'); //RUD
+                await updateHermandad(params.id, data)
+            } else {
+                await createHermandad(data);
+                console.log('Crear hermandad');
+            }
+            navigate("/hermandades");
         } catch (error) {
             console.error("Error al crear la hermandad:", error);
         }
     });
+
+    useEffect(() => { //RUD
+        async function cargarHermandad() {
+            if (params.id) {
+                const {data} = await getHermandad(params.id)
+                
+                setValue('nombre', data.nombre)
+                setValue('descripcion', data.descripcion)
+                setValue('poblacion', data.poblacion)
+                setValue('cif', data.cif)
+                setValue('email', data.email)
+                setValue('telefono', data.telefono)
+            }
+        }
+        cargarHermandad();
+    }, [])
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -88,6 +111,13 @@ export function HermandadFormPage() {
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Hermandad</button>
             </form>
+            {params.id && <button onClick={async () => {
+                const accepted = window.confirm('¿Estás seguro?')
+                if (accepted) {
+                    await deleteHermandad(params.id);
+                    navigate("/hermandades");
+                }
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>} 
         </div>
     );
 }

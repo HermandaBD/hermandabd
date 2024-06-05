@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getEventos } from "../../api/evento.api";
 import { EventoList } from "../../components/evento/EventoList";
+import { useNavigate } from "react-router-dom";
 
 export function EventosPage() {
     const [eventos, setEventos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {

@@ -1,13 +1,14 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { createPago } from "../../api/pago.api.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { createPago, deletePago, updatePago, getPago } from "../../api/pago.api.js";
 import { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api.js";
 import { getHermanos } from "../../api/hermano.api.js";
 
 export function PagoFormPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
+    const params = useParams();
     const [hermandades, setHermandades] = useState([]);
     const [hermanos, setHermanos] = useState([]);
 
@@ -25,13 +26,34 @@ export function PagoFormPage() {
 
     const onSubmit = handleSubmit(async data => {
         try {
-            await createPago(data);
-            console.log("Pago creado");
-            navigate('/pagos');
+            if (params.id) {
+                console.log('Actualizando'); //RUD
+                await updatePago(params.id, data)
+            } else {
+                await createPago(data);
+                console.log('Crear pago');
+            }
+            navigate("/pagos");
         } catch (error) {
             console.error("Error al crear el pago:", error);
         }
     });
+
+    useEffect(() => { //RUD
+        async function cargarPago() {
+            if (params.id) {
+                const {data} = await getPago(params.id)
+                
+                setValue('nombre', data.nombre)
+                setValue('descripcion', data.descripcion)
+                setValue('fecha', data.fecha)
+                setValue('valor', data.valor)
+                setValue('hermandad', data.hermandad)
+                setValue('hermano', data.hermano)
+            }
+        }
+        cargarPago();
+    }, [])
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -115,6 +137,13 @@ export function PagoFormPage() {
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Pago</button>
             </form>
+            {params.id && <button onClick={async () => {
+                const accepted = window.confirm('¿Estás seguro?')
+                if (accepted) {
+                    await deletePago(params.id);
+                    navigate("/pagos");
+                }
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>} 
         </div>
     );
 }

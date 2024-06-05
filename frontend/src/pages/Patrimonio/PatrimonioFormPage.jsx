@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { createPatrimonio } from "../../api/patrimonio.api.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { createPatrimonio, updatePatrimonio, deletePatrimonio, getPatrimonio } from "../../api/patrimonio.api.js";
 import { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api.js";
 
 export function PatrimonioFormPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
+    const params = useParams();
     const [hermandades, setHermandades] = useState([]);
 
     useEffect(() => {
@@ -20,13 +21,34 @@ export function PatrimonioFormPage() {
 
     const onSubmit = handleSubmit(async data => {
         try {
-            await createPatrimonio(data);
-            console.log("Patrimonio creado");
-            navigate('/patrimonios');
+            if (params.id) {
+                console.log('Actualizando'); //RUD
+                await updatePatrimonio(params.id, data)
+            } else {
+                await createPatrimonio(data);
+                console.log('Crear patrimonio');
+            }
+            navigate("/patrimonios");
         } catch (error) {
             console.error("Error al crear el patrimonio:", error);
         }
     });
+
+    useEffect(() => { //RUD
+        async function cargarPatrimonio() {
+            if (params.id) {
+                const {data} = await getPatrimonio(params.id)
+                
+                setValue('nombre', data.nombre)
+                setValue('descripcion', data.descripcion)
+                setValue('fecha_llegada', data.fecha_llegada)
+                setValue('fecha_realizacion', data.fecha_realizacion)
+                setValue('valor', data.valor)
+                setValue('hermandad', data.hermandad)
+            }
+        }
+        cargarPatrimonio();
+    }, [])
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -104,6 +126,13 @@ export function PatrimonioFormPage() {
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Patrimonio</button>
             </form>
+            {params.id && <button onClick={async () => {
+                const accepted = window.confirm('¿Estás seguro?')
+                if (accepted) {
+                    await deletePatrimonio(params.id);
+                    navigate("/patrimonios");
+                }
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>}
         </div>
     );
 }

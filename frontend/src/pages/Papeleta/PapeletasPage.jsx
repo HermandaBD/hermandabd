@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getPapeletas } from "../../api/papeleta.api";
 import { PapeletaList } from "../../components/papeleta/PapeletaList";
+import { useNavigate } from "react-router-dom";
 
 export function PapeletasPage() {
     const [papeletas, setPapeletas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
