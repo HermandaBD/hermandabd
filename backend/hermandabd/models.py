@@ -1,11 +1,26 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
-
+from django.utils.deconstruct import deconstructible
+import os
 
 User._meta.get_field("email")._unique = True
 User._meta.get_field("email").blank = False
 User._meta.get_field("email").null = False
+
+
+@deconstructible
+class PathAndRename:
+    def __init__(self, sub_path):
+        self.sub_path = sub_path
+
+    def __call__(self, instance, filename):
+        path = os.path.join(self.sub_path, str(instance.hermandad.id))
+        ext = filename.split(".")[-1]
+        filename = "{}.{}".format(filename.split(".")[0], ext)
+        return os.path.join(path, filename)
+
+path_and_rename = PathAndRename('documentos')
 
 
 class Hermandad(models.Model):
@@ -65,10 +80,11 @@ class Etiqueta(models.Model):
 
 class Documento(models.Model):
     nombre = models.CharField(max_length=200)
-    ruta = models.CharField(max_length=400)
+    archivo = models.FileField(upload_to=path_and_rename)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
-    etiquetas = models.ManyToManyField(Etiqueta)
-
+    etiquetas = models.ManyToManyField(Etiqueta, related_name="documentos", blank=True)
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+    
     def __str__(self):
         return self.nombre
 

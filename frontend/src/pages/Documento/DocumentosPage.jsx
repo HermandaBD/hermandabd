@@ -23,7 +23,6 @@ export function DocumentosPage() {
 
     if (loading) return <div>Cargando...</div>;
     if (error) return <div>Error: {error}</div>;
-
     return (
         <div className='max-w-4xl mx-auto my-5'>
             <h1 className="text-2xl font-bold mb-5">Listado de Documentos</h1>
@@ -31,14 +30,13 @@ export function DocumentosPage() {
                 <thead>
                     <tr>
                         <th className="py-2 px-4 border-b">Nombre</th>
-                        <th className="py-2 px-4 border-b">Ruta</th>
                         <th className="py-2 px-4 border-b">Hermandad</th>
                         <th className="py-2 px-4 border-b">Etiquetas</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {cartas.map(carta => (
-                        <CartaList key={carta.id} carta={carta}/>
+                    {documentos.map(documento => (
+                        <DocumentoList key={documento.id} documento={documento}/>
                     ))}
                 </tbody>
             </table>
