@@ -1,13 +1,14 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { createPapeleta } from "../../api/papeleta.api.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { createPapeleta, deletePapeleta, updatePapeleta, getPapeleta } from "../../api/papeleta.api.js";
 import { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api.js";
 import { getHermanos } from "../../api/hermano.api.js";
 
 export function PapeletaFormPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
+    const params = useParams();
     const [hermandades, setHermandades] = useState([]);
     const [hermanos, setHermanos] = useState([]);
 
@@ -25,13 +26,36 @@ export function PapeletaFormPage() {
 
     const onSubmit = handleSubmit(async data => {
         try {
-            await createPapeleta(data);
-            console.log("Papeleta de sitio creada");
-            navigate('/papeletas');
+            if (params.id) {
+                console.log('Actualizando'); //RUD
+                await updatePapeleta(params.id, data)
+            } else {
+                await createPapeleta(data);
+                console.log('Crear papeleta');
+            }
+            navigate("/papeletas");
         } catch (error) {
-            console.error("Error al crear la papeleta de sitio:", error);
+            console.error("Error al crear la papeleta:", error);
         }
     });
+
+    useEffect(() => { //RUD
+        async function cargarPapeleta() {
+            if (params.id) {
+                const {data} = await getPapeleta(params.id)
+                
+                setValue('nombre_evento', data.nombre_evento)
+                setValue('ubicacion', data.ubicacion)
+                setValue('puesto', data.puesto)
+                setValue('valor', data.valor)
+                setValue('fecha', data.fecha)
+                setValue('hora', data.hora)
+                setValue('hermandad', data.hermandad)
+                setValue('hermano', data.hermano)
+            }
+        }
+        cargarPapeleta();
+    }, [])
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -134,8 +158,15 @@ export function PapeletaFormPage() {
                 {errors.hermano && <span>Este campo es obligatorio</span>}
                 
                 <br />
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Papeleta de Sitio</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Papeleta de Sitio</button>
             </form>
+            {params.id && <button onClick={async () => {
+                const accepted = window.confirm('¿Estás seguro?')
+                if (accepted) {
+                    await deletePapeleta(params.id);
+                    navigate("/papeletas");
+                }
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>} 
         </div>
     );
 }

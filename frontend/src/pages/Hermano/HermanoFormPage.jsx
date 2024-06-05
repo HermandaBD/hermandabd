@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { createHermano } from "../../api/hermano.api"; 
+import { createHermano, deleteHermano, updateHermano, getHermano } from "../../api/hermano.api"; 
+import { getHermandades } from "../../api/hermandad.api.js";
 
 export function HermanoFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
+    const params = useParams();
+    const [hermandades, setHermandades] = useState([]);
     const validateDNI = (dni) => {
         const dniRegex = /^\d{8}[A-Z]$/;
         return dniRegex.test(dni) || "DNI debe tener 8 números seguidos de una letra mayúscula";
@@ -16,17 +19,63 @@ export function HermanoFormPage() {
         const ibanRegex = /^[A-Z]{2}\d{2}[A-Z\d]{12,30}$/;
         return ibanRegex.test(iban) || "IBAN no es válido";
     };
+
+    useEffect(() => {
+        async function fetchHermandades() {
+            const response = await getHermandades();
+            setHermandades(response.data);
+        }
+
+        fetchHermandades();
+    }, []);
+
     const onSubmit = handleSubmit(async data => {
         try {
             if (data.fecha_baja == ''){
                 data.fecha_baja = null;
             }
-            await createHermano(data);
-            navigate('/hermanos'); 
+            if (params.id) {
+                console.log('Actualizando'); //RUD
+                await updateHermano(params.id, data)
+            } else {
+                await createHermano(data);
+                console.log('Crear hermano');
+            }
+            navigate("/hermanos");
         } catch (error) {
             console.error("Error al crear el hermano:", error);
         }
     });
+
+    useEffect(() => { //RUD
+        async function cargarHermano() {
+            if (params.id) {
+                const {data} = await getHermano(params.id)
+                
+                setValue('nombre', data.nombre)
+                setValue('apellidos', data.apellidos)
+                setValue('dni', data.dni)
+                setValue('codigo_postal', data.codigo_postal)
+                setValue('direccion', data.direccion)
+                setValue('email', data.email)
+                setValue('fecha_nacimiento', data.fecha_nacimiento)
+                setValue('fecha_alta', data.fecha_alta)
+                setValue('fecha_baja', data.fecha_baja)
+                setValue('forma_pago', data.forma_pago)
+                setValue('hermandad', data.hermandad)
+                setValue('forma_pago', data.forma_pago)
+                setValue('iban', data.iban)
+                setValue('localidad', data.localidad)
+                setValue('numero_hermano', data.numero_hermano)
+                setValue('provincia', data.provincia)
+                setValue('telefono', data.telefono)
+                setValue('titular_cuenta_bancaria', data.titular_cuenta_bancaria)
+                setValue('tutor legal', data.tutor_legal)
+            }
+        }
+        cargarHermano();
+    }, [])
+
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -81,9 +130,20 @@ export function HermanoFormPage() {
                 {errors.forma_pago && <span>Campo necesario<br /></span>}
 
                 <label htmlFor="hermandad">Hermandad</label>
-                <input type="number" name="hermandad" id="hermandad" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                {...register('hermandad', { required: true })} />
-                {errors.hermandad && <span>Campo necesario<br /></span>}
+                <select 
+                    name="hermandad" 
+                    id="hermandad" 
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
+                    {...register('hermandad', { required: true })} 
+                >
+                    <option value="">Seleccione una hermandad</option>
+                    {hermandades.map((hermandad) => (
+                        <option key={hermandad.id} value={hermandad.id}>
+                            {hermandad.nombre}
+                        </option>
+                    ))}
+                </select>
+                {errors.hermandad && <span>Este campo es obligatorio</span>}
 
                 <label htmlFor="iban">IBAN</label>
                 <input type="text" name="iban" id="iban" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
@@ -119,8 +179,15 @@ export function HermanoFormPage() {
                 <input type="text" name="tutor_legal" id="tutor_legal" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
                 {...register('tutor_legal')} />
 
-                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Crear Hermano</button>
+                <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Hermano</button>
             </form>
+            {params.id && <button onClick={async () => {
+                const accepted = window.confirm('¿Estás seguro?')
+                if (accepted) {
+                    await deleteHermano(params.id);
+                    navigate("/hermanos");
+                }
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>} 
         </div>
     );
 }

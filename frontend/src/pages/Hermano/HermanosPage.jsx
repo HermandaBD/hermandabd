@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getHermanos } from "../../api/hermano.api";
 import { HermanoList } from "../../components/hermano/HermanoList";
+import { useNavigate } from "react-router-dom";
+
 export function HermanosPage() {
     const [hermanos, setHermanos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -41,6 +44,9 @@ export function HermanosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/hermano')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Hermano</button>
             
         </div>
     );

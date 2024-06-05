@@ -58,15 +58,15 @@ DJOSER = {
     "USER_ID_FIELD": "username",
     "LOGIN_FIELD": "email",
     "SEND_ACTIVATION_EMAIL": True,
-    "ACTIVATION_URL": "api/v1/users/activation/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "reset_password/{uid}/{token}",
     'SERIALIZERS': {
-        'token_create': 'hermandabd.serializers.CustomTokenCreateSerializer', # TODO CREAR
+        'token_create': 'hermandabd.serializers.CustomTokenCreateSerializer',
     },
 }
 
 PROTOCOL = "http"
-DOMAIN = "localhost:8000"
+DOMAIN = "localhost:3000"
 if not DEBUG:
     PROTOCOL = "https"
     DOMAIN = "boilerplate.saasitive.com" # TODO CAMBIAR A URL DE PRODUCCIÓN CUANDO LA TENGAMOS

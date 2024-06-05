@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate,useParams } from "react-router-dom";
 import { login } from "../api/auth.api.js" 
+import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContext.jsx";
 
 export function LoginPage() {
     const { register,handleSubmit, formState: {
@@ -9,12 +11,14 @@ export function LoginPage() {
     }, setValue} = useForm()
     const navigate = useNavigate()
     const params = useParams()
+    const { loginAction } = useContext(AuthContext);
 
     const onSubmit = handleSubmit(async data => {
         try {
-            await login(data);
-            console.log("sesión iniciadaa")
-            navigate('/me'); 
+            const response = await login(data);
+            toast.success("Sesión iniciada");
+            loginAction();
+            navigate('/me');
         } catch (error) {
             console.error("Login failed:", error);
         }

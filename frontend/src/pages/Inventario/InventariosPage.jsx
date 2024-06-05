@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getInventarios } from "../../api/inventario.api";
 import { InventarioList } from "../../components/inventario/InventarioList";
+import { useNavigate } from "react-router-dom";
+
 
 export function InventariosPage() {
     const [inventarios, setInventarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -42,6 +45,9 @@ export function InventariosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/inventario')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Inventario</button>
             
         </div>
     );

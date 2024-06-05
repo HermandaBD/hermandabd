@@ -33,4 +33,33 @@ export const getPapeletas = async () => {
         console.error("Failed to get Papeletas: ", error);
         throw error;
     }
+};
+
+export const getPapeleta = async (id) => {
+    try {
+        return await papeletaApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Papeleta: ", error);
+        throw error;
+    }
+};
+
+export const deletePapeleta = async (id) => {
+    try {
+        return await papeletaApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete papeleta: ", error);
+        throw error;
+    }
+};
+
+export const updatePapeleta = async (id, papeleta) => {
+    try {
+        return await papeletaApi.put(`/${id}/`, papeleta);
+    } catch (error) {
+        console.error("Failed to update papeleta: ", error);
+        throw error;
+    }
+
+
 }

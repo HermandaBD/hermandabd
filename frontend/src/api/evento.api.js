@@ -33,4 +33,33 @@ export const getEventos = async () => {
         console.error("Failed to get Eventos: ", error);
         throw error;
     }
+};
+
+export const getEvento = async (id) => {
+    try {
+        return await eventoApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Evento: ", error);
+        throw error;
+    }
+};
+
+export const deleteEvento = async (id) => {
+    try {
+        return await eventoApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete Evento: ", error);
+        throw error;
+    }
+};
+
+export const updateEvento = async (id, evento) => {
+    try {
+        return await eventoApi.put(`/${id}/`, evento);
+    } catch (error) {
+        console.error("Failed to update Evento: ", error);
+        throw error;
+    }
+
+
 }

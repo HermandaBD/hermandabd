@@ -33,4 +33,33 @@ export const getHermandades = async () => {
         console.error("Failed to get Hermandades: ", error);
         throw error;
     }
+};
+
+export const getHermandad = async (id) => {
+    try {
+        return await hermandadApi.get(`/${id}`);
+    } catch (error) {
+        console.error("Failed to get Hermandad: ", error);
+        throw error;
+    }
+};
+
+export const deleteHermandad = async (id) => {
+    try {
+        return await hermandadApi.delete(`/${id}`);
+    } catch (error) {
+        console.error("Failed to delete Hermandad: ", error);
+        throw error;
+    }
+};
+
+export const updateHermandad = async (id, hermandad) => {
+    try {
+        return await hermandadApi.put(`/${id}/`, hermandad);
+    } catch (error) {
+        console.error("Failed to update Hermandad: ", error);
+        throw error;
+    }
+
+
 }

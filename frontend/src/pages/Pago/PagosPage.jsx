@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getPagos } from "../../api/pago.api";
 import { PagoList } from "../../components/pago/PagoList";
+import { useNavigate } from "react-router-dom";
 
 export function PagosPage() {
     const [pagos, setPagos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -42,6 +44,9 @@ export function PagosPage() {
                     ))}
                 </tbody>
             </table>
+            <button onClick={() => {
+                navigate('/pago')
+            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Pago</button>
             
         </div>
     );
