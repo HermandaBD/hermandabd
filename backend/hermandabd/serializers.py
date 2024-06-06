@@ -48,9 +48,12 @@ class EtiquetaSerializer(serializers.ModelSerializer):
 
 
 class DocumentoSerializer(serializers.ModelSerializer):
+    hermandad = serializers.PrimaryKeyRelatedField(queryset=Hermandad.objects.all())
+    etiquetas = serializers.PrimaryKeyRelatedField(many=True, queryset=Etiqueta.objects.all(), required=False)
+    
     class Meta:
         model = Documento
-        fields = "__all__"
+        fields = ['id', 'nombre', 'archivo', 'hermandad', 'etiquetas', 'fecha_subida']
 
 
 class PatrimonioSerializer(serializers.ModelSerializer):
