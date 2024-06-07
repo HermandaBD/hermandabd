@@ -1,4 +1,7 @@
 from rest_framework import viewsets
+from rest_framework.response import Response
+from djoser.views import UserViewSet
+from rest_framework.permissions import IsAuthenticated
 from .models import (
     Hermandad,
     Hermano,
@@ -22,7 +25,16 @@ from .serializers import (
     PapeletaSitioSerializer,
     CartaSerializer,
     PagoSerializer,
+    CustomUserSerializer
 )
+
+
+class CustomUserViewSet(UserViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def me(self, request, *args, **kwargs):
+        serializer = CustomUserSerializer(request.user, context={"request": request})
+        return Response(serializer.data)
 
 
 class HermandadViewSet(viewsets.ModelViewSet):
@@ -73,4 +85,3 @@ class CartaViewSet(viewsets.ModelViewSet):
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
-

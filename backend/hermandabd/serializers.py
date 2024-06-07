@@ -1,11 +1,26 @@
 from django.contrib.auth import authenticate, get_user_model
 from djoser.conf import settings
-from djoser.serializers import TokenCreateSerializer
+from djoser.serializers import TokenCreateSerializer, UserSerializer
 from rest_framework import serializers
 from .models import *
 
 
 User = get_user_model()
+
+
+class CustomUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "date_joined",
+            "hermandad",
+        )
+
 
 class CustomTokenCreateSerializer(TokenCreateSerializer):
 
@@ -19,9 +34,10 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
             self.user = User.objects.filter(**params).first()
             if self.user and not self.user.check_password(password):
                 self.fail("invalid_credentials")
-        if self.user: # and self.user.is_active:
+        if self.user:  # and self.user.is_active:
             return attrs
         self.fail("invalid_credentials")
+
 
 class HermandadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,11 +65,13 @@ class EtiquetaSerializer(serializers.ModelSerializer):
 
 class DocumentoSerializer(serializers.ModelSerializer):
     hermandad = serializers.PrimaryKeyRelatedField(queryset=Hermandad.objects.all())
-    etiquetas = serializers.PrimaryKeyRelatedField(many=True, queryset=Etiqueta.objects.all(), required=False)
-    
+    etiquetas = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Etiqueta.objects.all(), required=False
+    )
+
     class Meta:
         model = Documento
-        fields = ['id', 'nombre', 'archivo', 'hermandad', 'etiquetas', 'fecha_subida']
+        fields = ["id", "nombre", "archivo", "hermandad", "etiquetas", "fecha_subida"]
 
 
 class PatrimonioSerializer(serializers.ModelSerializer):
@@ -78,6 +96,7 @@ class CartaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carta
         fields = "__all__"
+
 
 class PagoSerializer(serializers.ModelSerializer):
     class Meta:

@@ -19,7 +19,7 @@ authApi.interceptors.request.use(
 export const registerAccount = async (user) => {
     try {
         const response = await authApi.post("/api/v1/users/", user);
-        return response.success;
+        return response;
     } catch (error) {
         console.error("Failed to register new user: ", error);
         return false;
