@@ -11,7 +11,7 @@ export function RegisterFormPage() {
     const onSubmit = handleSubmit(async user => {
         try {
             const success = await registerAccount(user);
-            if (success == 201) {
+            if (success.status == 201) {
                 toast.success("Cuenta creada con éxito, ahora activa la cuenta");
                 navigate("/"); // TODO mostrar mensaje de que tiene que activar la cuenta comprobando el correo puesto
             }

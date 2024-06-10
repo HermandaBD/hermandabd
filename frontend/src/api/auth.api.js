@@ -68,7 +68,9 @@ export const getCurrentUser = async () => {
                 username: response.data.username,
                 email: response.data.email
             };
-            setCurrentUser(user, '');
+            setCurrentUser(user);
+            setHermandadUsuario(response.data.hermandad);
+            setStaff(response.data.is_staff);
         })
         .catch(error => {
             unsetCurrentUser();
@@ -95,17 +97,43 @@ export const setToken = token => {
     localStorage.setItem("auth_token", token);
 };
 
+export const setHermandadUsuario = hermandad => {
+    localStorage.setItem("hermandad_usuario", hermandad);
+};
+
+export const setStaff = staff => {
+    localStorage.setItem("staff", staff);
+}
+
 export const logout = () => {
     
     authApi.post("/api/v1/token/logout/");
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user");
-    toast.success("Logout successful.");
+    localStorage.removeItem("hermandad_usuario");
+    localStorage.removeItem("staff");
+    toast.success("Sesión cerrada con éxito");
     
 };
 
 export const unsetCurrentUser = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user");
+    localStorage.removeItem("hermandad_usuario");
+    localStorage.removeItem("staff");
 };
 
+export const getUsers = async () => {
+    const response = await authApi.get("/api/v1/users/");
+    return response;
+}
+
+export const getUser = async (username) => {
+    const response = await authApi.get(`/api/v1/users/${username}/`);
+    return response;
+}
+
+export const addHermandadUsuario = async (username,data) => {
+    const response = await authApi.put(`/api/v1/users/${username}/`,data);
+    return response;
+}

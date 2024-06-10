@@ -6,6 +6,10 @@ from .models import *
 class HermandadAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    pass
+
 @admin.register(Hermano)
 class HermanoAdmin(admin.ModelAdmin):
     pass

@@ -6,7 +6,6 @@ export function MePage() {
     useEffect(() => {
         async function getMe() {
             const res = await getMeLogin();
-            console.log(res);
             setMe(res);
         }
         getMe();

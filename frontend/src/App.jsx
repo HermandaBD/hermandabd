@@ -32,6 +32,8 @@ import { RegisterFormPage } from './pages/RegisterFormPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import { AuthProvider } from './context/AuthContext';
+import { UsuarioHermandadFormPage } from './pages/UsuarioHermandadFormPage.jsx';
+import { AdminRoute } from './components/AdminRoute.jsx';
 
 
 
@@ -59,6 +61,7 @@ function App() {
               <Route path='/register' element={<RegisterFormPage />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/activate/:uid/:token' element={<ActivateAccountPage />} />
+              <Route path='/usuarioHermandad' element={<AdminRoute element={UsuarioHermandadFormPage} />}/>
               <Route path='/me' element={<PrivateRoute element={MePage} />} />
               <Route path='/hermandad' element={<PrivateRoute element={HermandadFormPage} />} />
               <Route path='/hermandades' element={<PrivateRoute element={HermandadPage} />} />
