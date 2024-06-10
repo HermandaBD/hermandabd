@@ -9,15 +9,11 @@ export function CartaFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
     const params = useParams(); //RUD
-    const [hermandades, setHermandades] = useState([]);
     const [hermanos, setHermanos] = useState([]);  // Cambiar destinatarioss a hermanos
-
+    const hermandad = localStorage.getItem('hermandad_usuario');
     useEffect(() => {
         async function fetchData() {
             try {
-                const hermandadesResponse = await getHermandades();
-                setHermandades(hermandadesResponse.data);
-
                 const hermanosResponse = await getHermanos();
                 setHermanos(hermanosResponse.data);
             } catch (error) {
@@ -92,21 +88,7 @@ export function CartaFormPage() {
                 />
                 {errors.fecha_envio && <span>Este campo es obligatorio</span>}
 
-                <label htmlFor="hermandad">Hermandad</label>
-                <select
-                    name="hermandad"
-                    id="hermandad"
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
-                    {...register('hermandad', { required: true })}
-                >
-                    <option value="">Seleccione una hermandad</option>
-                    {hermandades.map((hermandad) => (
-                        <option key={hermandad.id} value={hermandad.id}>
-                            {hermandad.nombre}
-                        </option>
-                    ))}
-                </select>
-                {errors.hermandad && <span>Este campo es obligatorio</span>}
+                <input type="hidden" id="hermandad" name="hermandad" value={hermandad} />
 
                 <label htmlFor="destinatarios">Destinatarios</label>
                 <select

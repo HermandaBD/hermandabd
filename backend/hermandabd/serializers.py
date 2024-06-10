@@ -50,18 +50,36 @@ class HermanoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hermano
         fields = "__all__"
+    
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar un hermano a esta hermandad.")
+        return value
 
 
 class EventoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evento
         fields = "__all__"
+    
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar un envento a esta hermandad.")
+        return value
 
 
 class EtiquetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Etiqueta
         fields = "__all__"
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar una etiqueta a esta hermandad.")
+        return value
 
 
 class DocumentoSerializer(serializers.ModelSerializer):
@@ -73,33 +91,69 @@ class DocumentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Documento
         fields = ["id", "nombre", "archivo", "hermandad", "etiquetas", "fecha_subida"]
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar un documento a esta hermandad.")
+        return value
 
 
 class PatrimonioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patrimonio
         fields = "__all__"
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar un patrimonio a esta hermandad.")
+        return value
 
 
 class InventarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventario
         fields = "__all__"
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar un inventario a esta hermandad.")
+        return value
 
 
 class PapeletaSitioSerializer(serializers.ModelSerializer):
     class Meta:
         model = PapeletaSitio
         fields = "__all__"
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar una papeleta a esta hermandad.")
+        return value
 
 
 class CartaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carta
         fields = "__all__"
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar una carta a esta hermandad.")
+        return value
 
 
 class PagoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pago
         fields = "__all__"
+        
+    def validate_hermandad(self, value):
+        user = self.context['request'].user
+        if not user.is_staff and value != user.hermandad:
+            raise serializers.ValidationError("No tiene permiso para agregar un pago a esta hermandad.")
+        return value

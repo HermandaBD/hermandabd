@@ -8,7 +8,8 @@ export function HermanoFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
     const params = useParams();
-    const [hermandades, setHermandades] = useState([]);
+    const hermandad = localStorage.getItem('hermandad_usuario');
+
     const validateDNI = (dni) => {
         const dniRegex = /^\d{8}[A-Z]$/;
         return dniRegex.test(dni) || "DNI debe tener 8 números seguidos de una letra mayúscula";
@@ -19,15 +20,6 @@ export function HermanoFormPage() {
         const ibanRegex = /^[A-Z]{2}\d{2}[A-Z\d]{12,30}$/;
         return ibanRegex.test(iban) || "IBAN no es válido";
     };
-
-    useEffect(() => {
-        async function fetchHermandades() {
-            const response = await getHermandades();
-            setHermandades(response.data);
-        }
-
-        fetchHermandades();
-    }, []);
 
     const onSubmit = handleSubmit(async data => {
         try {
@@ -129,21 +121,8 @@ export function HermanoFormPage() {
                 {...register('forma_pago', { required: true })} />
                 {errors.forma_pago && <span>Campo necesario<br /></span>}
 
-                <label htmlFor="hermandad">Hermandad</label>
-                <select 
-                    name="hermandad" 
-                    id="hermandad" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('hermandad', { required: true })} 
-                >
-                    <option value="">Seleccione una hermandad</option>
-                    {hermandades.map((hermandad) => (
-                        <option key={hermandad.id} value={hermandad.id}>
-                            {hermandad.nombre}
-                        </option>
-                    ))}
-                </select>
-                {errors.hermandad && <span>Este campo es obligatorio</span>}
+                <input type="hidden" id="hermandad" name="hermandad" value={hermandad} 
+                    {...register('hermandad')}/>
 
                 <label htmlFor="iban">IBAN</label>
                 <input type="text" name="iban" id="iban" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
