@@ -135,9 +135,9 @@ export function HermanoFormPage() {
                 {errors.localidad && <span>Campo necesario<br /></span>}
 
                 <label htmlFor="numero_hermano">Número de Hermano</label>
-                <input type="number" name="numero_hermano" id="numero_hermano" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                {...register('numero_hermano', { required: true, max: 999999 })} />
-                {errors.numero_hermano && <span>Campo necesario<br /></span>}
+                <input readOnly type="number" name="numero_hermano" id="numero_hermano" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
+                /* {...register('numero_hermano')} */ />
+                {/* {errors.numero_hermano && <span>Campo necesario<br /></span>} */}
 
                 <label htmlFor="provincia">Provincia</label>
                 <input type="text" name="provincia" id="provincia" className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
