@@ -30,7 +30,7 @@ export function DocumentosPage() {
                 <thead>
                     <tr>
                         <th className="py-2 px-4 border-b">Nombre</th>
-                        <th className="py-2 px-4 border-b">Hermandad</th>
+                        <th className="py-2 px-4 border-b">Acciones</th>
                         <th className="py-2 px-4 border-b">Etiquetas</th>
                     </tr>
                 </thead>

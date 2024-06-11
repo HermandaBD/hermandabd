@@ -123,6 +123,10 @@ class Documento(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    def delete(self, *args, **kwargs):
+        self.archivo.delete()
+        super().delete(*args, **kwargs)
 
 
 class Patrimonio(models.Model):
