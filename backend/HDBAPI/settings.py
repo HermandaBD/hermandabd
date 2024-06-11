@@ -54,6 +54,8 @@ REST_FRAMEWORK = {
     ]
 }
 
+AUTH_USER_MODEL = 'hermandabd.User'
+
 DJOSER = {
     "USER_ID_FIELD": "username",
     "LOGIN_FIELD": "email",
@@ -62,6 +64,8 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "reset_password/{uid}/{token}",
     'SERIALIZERS': {
         'token_create': 'hermandabd.serializers.CustomTokenCreateSerializer',
+        'user': 'hermandabd.serializers.CustomUserSerializer',
+        'current_user': 'hermandabd.serializers.CustomUserSerializer',
     },
 }
 

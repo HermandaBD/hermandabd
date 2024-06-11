@@ -8,16 +8,7 @@ export function EventoFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
     const params = useParams();
-    const [hermandades, setHermandades] = useState([]);
-
-    useEffect(() => {
-        async function fetchHermandades() {
-            const response = await getHermandades();
-            setHermandades(response.data);
-        }
-
-        fetchHermandades();
-    }, []);
+    const hermandad = localStorage.getItem('hermandad_usuario');
 
     const onSubmit = handleSubmit(async data => {
         try {
@@ -48,7 +39,7 @@ export function EventoFormPage() {
     useEffect(() => { //RUD
         async function cargarEvento() {
             if (params.id) {
-                const {data} = await getEvento(params.id)
+                const { data } = await getEvento(params.id)
                 setValue('descripcion', data.descripcion)
                 setValue('fecha_inicio', formatDatetimeLocal(data.fecha_inicio))
                 setValue('fecha_fin', formatDatetimeLocal(data.fecha_fin))
@@ -62,52 +53,39 @@ export function EventoFormPage() {
         <div className='max-w-xl mx-auto my-5'>
             <form onSubmit={onSubmit}>
                 <label htmlFor="descripcion">Descripción</label>
-                <input 
-                    type="text" 
-                    name="descripcion" 
-                    id="descripcion" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
+                <input
+                    type="text"
+                    name="descripcion"
+                    id="descripcion"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
                     placeholder="Descripción del evento"
-                    {...register('descripcion', { required: true, maxLength: 100 })} 
+                    {...register('descripcion', { required: true, maxLength: 100 })}
                 />
                 {errors.descripcion && <span>Este campo es obligatorio y debe tener un máximo de 100 caracteres</span>}
-                
+
                 <label htmlFor="fecha_inicio">Fecha de inicio</label>
-                <input 
-                    type="datetime-local" 
-                    name="fecha_inicio" 
-                    id="fecha_inicio" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('fecha_inicio', { required: true })} 
+                <input
+                    type="datetime-local"
+                    name="fecha_inicio"
+                    id="fecha_inicio"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
+                    {...register('fecha_inicio', { required: true })}
                 />
                 {errors.fecha_inicio && <span>Este campo es obligatorio</span>}
-                
+
                 <label htmlFor="fecha_fin">Fecha de fin</label>
-                <input 
-                    type="datetime-local" 
-                    name="fecha_fin" 
-                    id="fecha_fin" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('fecha_fin', { required: true })} 
+                <input
+                    type="datetime-local"
+                    name="fecha_fin"
+                    id="fecha_fin"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
+                    {...register('fecha_fin', { required: true })}
                 />
                 {errors.fecha_fin && <span>Este campo es obligatorio</span>}
-                
-                <label htmlFor="hermandad">Hermandad</label>
-                <select 
-                    name="hermandad" 
-                    id="hermandad" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('hermandad', { required: true })} 
-                >
-                    <option value="">Seleccione una hermandad</option>
-                    {hermandades.map((hermandad) => (
-                        <option key={hermandad.id} value={hermandad.id}>
-                            {hermandad.nombre}
-                        </option>
-                    ))}
-                </select>
-                {errors.hermandad && <span>Este campo es obligatorio</span>}
-                
+
+                <input type="hidden" id="hermandad" name="hermandad" value={hermandad}
+                    {...register('hermandad')} />
+
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Evento</button>
             </form>

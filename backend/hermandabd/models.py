@@ -1,12 +1,8 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.utils.deconstruct import deconstructible
 import os
-
-User._meta.get_field("email")._unique = True
-User._meta.get_field("email").blank = False
-User._meta.get_field("email").null = False
 
 
 @deconstructible
@@ -20,7 +16,8 @@ class PathAndRename:
         filename = "{}.{}".format(filename.split(".")[0], ext)
         return os.path.join(path, filename)
 
-path_and_rename = PathAndRename('documentos')
+
+path_and_rename = PathAndRename("documentos")
 
 
 class Hermandad(models.Model):
@@ -34,6 +31,22 @@ class Hermandad(models.Model):
     def __str__(self):
         return self.nombre
 
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True, blank=False, null=False)
+    # first_name = models.CharField(max_length=150, blank=False, null=False)
+    # last_name = models.CharField(max_length=150, blank=False, null=False)
+    hermandad = models.ForeignKey(
+        Hermandad, on_delete=models.CASCADE, blank=True, null=True
+    )
+
+    def __str__(self):
+        return self.username
+
+User._meta.get_field("first_name").null = False
+User._meta.get_field("first_name").blank = False
+User._meta.get_field("last_name").null = False
+User._meta.get_field("last_name").blank = False
 
 class Hermano(models.Model):
     nombre = models.CharField(max_length=50)
@@ -84,7 +97,7 @@ class Documento(models.Model):
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     etiquetas = models.ManyToManyField(Etiqueta, related_name="documentos", blank=True)
     fecha_subida = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return self.nombre
 

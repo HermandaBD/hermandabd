@@ -8,16 +8,7 @@ export function PatrimonioFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
     const params = useParams();
-    const [hermandades, setHermandades] = useState([]);
-
-    useEffect(() => {
-        async function fetchHermandades() {
-            const response = await getHermandades();
-            setHermandades(response.data);
-        }
-
-        fetchHermandades();
-    }, []);
+    const hermandad = localStorage.getItem('hermandad_usuario');
 
     const onSubmit = handleSubmit(async data => {
         try {
@@ -37,8 +28,8 @@ export function PatrimonioFormPage() {
     useEffect(() => { //RUD
         async function cargarPatrimonio() {
             if (params.id) {
-                const {data} = await getPatrimonio(params.id)
-                
+                const { data } = await getPatrimonio(params.id)
+
                 setValue('nombre', data.nombre)
                 setValue('descripcion', data.descripcion)
                 setValue('fecha_llegada', data.fecha_llegada)
@@ -54,75 +45,62 @@ export function PatrimonioFormPage() {
         <div className='max-w-xl mx-auto my-5'>
             <form onSubmit={onSubmit}>
                 <label htmlFor="nombre">Nombre</label>
-                <input 
-                    type="text" 
-                    name="nombre" 
-                    id="nombre" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
+                <input
+                    type="text"
+                    name="nombre"
+                    id="nombre"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
                     placeholder="Nombre del patrimonio"
-                    {...register('nombre', { required: true, maxLength: 100 })} 
+                    {...register('nombre', { required: true, maxLength: 100 })}
                 />
                 {errors.nombre && <span>Este campo es obligatorio y debe tener un máximo de 100 caracteres</span>}
-                
+
                 <label htmlFor="descripcion">Descripción</label>
-                <input 
-                    type="text" 
-                    name="descripcion" 
-                    id="descripcion" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
+                <input
+                    type="text"
+                    name="descripcion"
+                    id="descripcion"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
                     placeholder="Descripción"
-                    {...register('descripcion', { required: true, maxLength: 500 })} 
+                    {...register('descripcion', { required: true, maxLength: 500 })}
                 />
                 {errors.descripcion && <span>Este campo es obligatorio y debe tener un máximo de 500 caracteres</span>}
-                
+
                 <label htmlFor="fecha_llegada">Fecha de llegada</label>
-                <input 
-                    type="date" 
-                    name="fecha_llegada" 
-                    id="fecha_llegada" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('fecha_llegada', { required: true })} 
+                <input
+                    type="date"
+                    name="fecha_llegada"
+                    id="fecha_llegada"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
+                    {...register('fecha_llegada', { required: true })}
                 />
                 {errors.fecha_llegada && <span>Este campo es obligatorio</span>}
-                
+
                 <label htmlFor="fecha_realizacion">Fecha de realización</label>
-                <input 
-                    type="date" 
-                    name="fecha_realizacion" 
-                    id="fecha_realizacion" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('fecha_realizacion', { required: true })} 
+                <input
+                    type="date"
+                    name="fecha_realizacion"
+                    id="fecha_realizacion"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
+                    {...register('fecha_realizacion', { required: true })}
                 />
                 {errors.fecha_realizacion && <span>Este campo es obligatorio</span>}
-                
-                <label htmlFor="hermandad">Hermandad</label>
-                <select 
-                    name="hermandad" 
-                    id="hermandad" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
-                    {...register('hermandad', { required: true })} 
-                >
-                    <option value="">Seleccione una hermandad</option>
-                    {hermandades.map((hermandad) => (
-                        <option key={hermandad.id} value={hermandad.id}>
-                            {hermandad.nombre}
-                        </option>
-                    ))}
-                </select>
-                {errors.hermandad && <span>Este campo es obligatorio</span>}
-                
+
+                <input type="hidden" id="hermandad" name="hermandad" value={hermandad}
+                    {...register('hermandad')} />
+
                 <label htmlFor="valor">Valor</label>
-                <input 
-                    type="number" 
+                <input
+                    type="number"
                     step="0.01"
-                    name="valor" 
-                    id="valor" 
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3" 
+                    name="valor"
+                    id="valor"
+                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
                     placeholder="Valor del patrimonio"
-                    {...register('valor', { required: true, min: 0, max: 9999999999.99 })} 
+                    {...register('valor', { required: true, min: 0, max: 9999999999.99 })}
                 />
                 {errors.valor && <span>Este campo es obligatorio y debe ser un número entre 0 y 9999999999.99</span>}
-                
+
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Patrimonio</button>
             </form>

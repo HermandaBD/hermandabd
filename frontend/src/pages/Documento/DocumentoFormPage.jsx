@@ -10,6 +10,7 @@ export function DocumentoFormPage() {
     const navigate = useNavigate();
     const [etiquetasBD, setEtiquetas] = useState([]);
     const archivo = watch("archivo");
+    const hermandad = localStorage.getItem('hermandad_usuario');
 
     useEffect(() => {
         if (archivo && archivo.length > 0) {
@@ -33,7 +34,7 @@ export function DocumentoFormPage() {
             if (response == 201) {
                 // TODO CUANDO SE HAGA MERGE CON DEVELOP AÑADIR EL TOAST.SUCCESS
                 navigate('/documentos'); // Redirige a la página de lista de documentos después de crear uno nuevo
-            }else {
+            } else {
                 /* alert("Ocurrió un error") */
             }
         } catch (error) {
@@ -53,10 +54,8 @@ export function DocumentoFormPage() {
                 {...register('nombre', { maxLength: { value: 200, message: "El nombre no puede tener más de 200 caracteres" }, required: "Este campo es obligatorio" })} />
             {errors.nombre && <span className='text-red-500'>{errors.nombre.message}<br /></span>}
 
-            <label htmlFor="hermandad">Hermandad</label>
-            <input type="number" name="hermandad" id="hermandad" className="bg-zinc-700 p-3 rounded-lg block w-full my-3 text-black"
-                {...register('hermandad', { required: "Este campo es obligatorio" })} />
-            {errors.hermandad && <span className="text-red-500">{errors.hermandad.message}<br /></span>}
+            <input type="hidden" id="hermandad" name="hermandad" value={hermandad}
+                {...register('hermandad')} />
 
             <label htmlFor="etiquetas">Etiquetas</label>
             <select name="etiquetas" id="etiquetas" multiple className="bg-zinc-700 p-3 rounded-lg block w-full my-3 text-black"
