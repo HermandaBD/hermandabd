@@ -34,6 +34,7 @@ import 'react-toastify/ReactToastify.min.css';
 import { AuthProvider } from './context/AuthContext';
 import { UsuarioHermandadFormPage } from './pages/UsuarioHermandadFormPage.jsx';
 import { AdminRoute } from './components/AdminRoute.jsx';
+import { ImportarBD } from './pages/BD/ImportarBD.jsx';
 
 
 
@@ -92,6 +93,7 @@ function App() {
               <Route path='/etiquetas/:id' element={<PrivateRoute element={EtiquetaFormPage} />} />
               <Route path='/documento' element={<PrivateRoute element={DocumentoFormPage} />} />
               <Route path='/documentos' element={<PrivateRoute element={DocumentosPage} />} />
+              <Route path='/import' element={<PrivateRoute element={ImportarBD} />} />
             </Routes>
           </main>
           <Footer />
