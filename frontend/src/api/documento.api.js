@@ -49,3 +49,7 @@ export const getDocumentos = async () => {
         throw error;
     }
 }
+
+export const deleteDocumento = async id => {
+    return await documentoApi.delete(`/${id}`);
+}

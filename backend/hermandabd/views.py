@@ -26,7 +26,7 @@ from .serializers import (
     PapeletaSitioSerializer,
     CartaSerializer,
     PagoSerializer,
-    CustomUserSerializer
+    CustomUserSerializer,
 )
 
 
@@ -40,13 +40,14 @@ class CustomUserViewSet(UserViewSet):
 
 class HermandadViewSet(viewsets.ModelViewSet):
     queryset = Hermandad.objects.all()
-    serializer_class = HermandadSerializer     
+    serializer_class = HermandadSerializer
 
 
 class HermanoViewSet(viewsets.ModelViewSet):
     queryset = Hermano.objects.all()
     serializer_class = HermanoSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -57,6 +58,7 @@ class EventoViewSet(viewsets.ModelViewSet):
     queryset = Evento.objects.all()
     serializer_class = EventoSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -67,6 +69,7 @@ class EtiquetaViewSet(viewsets.ModelViewSet):
     queryset = Etiqueta.objects.all()
     serializer_class = EtiquetaSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -77,6 +80,10 @@ class DocumentoViewSet(viewsets.ModelViewSet):
     queryset = Documento.objects.all()
     serializer_class = DocumentoSerializer
     permission_classes = [isRelatedToHermandad]
+
+    def get_serializer_context(self):
+        return {"request": self.request}
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -87,6 +94,7 @@ class PatrimonioViewSet(viewsets.ModelViewSet):
     queryset = Patrimonio.objects.all()
     serializer_class = PatrimonioSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -97,6 +105,7 @@ class InventarioViewSet(viewsets.ModelViewSet):
     queryset = Inventario.objects.all()
     serializer_class = InventarioSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -107,6 +116,7 @@ class PapeletaSitioViewSet(viewsets.ModelViewSet):
     queryset = PapeletaSitio.objects.all()
     serializer_class = PapeletaSitioSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -117,6 +127,7 @@ class CartaViewSet(viewsets.ModelViewSet):
     queryset = Carta.objects.all()
     serializer_class = CartaSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
@@ -127,6 +138,7 @@ class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
     permission_classes = [isRelatedToHermandad]
+
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset
