@@ -1,6 +1,10 @@
 from django.contrib.auth import authenticate, get_user_model
 from djoser.conf import settings
-from djoser.serializers import TokenCreateSerializer, UserSerializer
+from djoser.serializers import (
+    TokenCreateSerializer,
+    UserSerializer,
+    UserCreateSerializer,
+)
 from rest_framework import serializers
 from .models import *
 
@@ -20,7 +24,35 @@ class CustomUserSerializer(UserSerializer):
             "date_joined",
             "hermandad",
             "is_staff",
+            "is_superuser",
         )
+
+    def validate_hermandad(self, value):
+        user = self.context["request"].user
+        if not user.is_superuser and value != user.hermandad:
+            raise serializers.ValidationError(
+                "No tiene permiso para agregar un usuario a esta hermandad."
+            )
+        return value
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = (
+            "id",
+            "username",
+            "password",
+            "email",
+            "first_name",
+            "last_name",
+            "hermandad",
+        )
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        return user
 
 
 class CustomTokenCreateSerializer(TokenCreateSerializer):
@@ -53,7 +85,7 @@ class HermanoSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un hermano a esta hermandad."
             )
@@ -67,7 +99,7 @@ class EventoSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un envento a esta hermandad."
             )
@@ -81,7 +113,7 @@ class EtiquetaSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar una etiqueta a esta hermandad."
             )
@@ -105,7 +137,7 @@ class DocumentoSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un documento a esta hermandad."
             )
@@ -119,7 +151,7 @@ class PatrimonioSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un patrimonio a esta hermandad."
             )
@@ -133,7 +165,7 @@ class InventarioSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un inventario a esta hermandad."
             )
@@ -147,7 +179,7 @@ class PapeletaSitioSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar una papeleta a esta hermandad."
             )
@@ -161,7 +193,7 @@ class CartaSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar una carta a esta hermandad."
             )
@@ -175,7 +207,7 @@ class PagoSerializer(serializers.ModelSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_staff and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un pago a esta hermandad."
             )

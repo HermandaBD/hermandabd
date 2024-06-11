@@ -37,11 +37,16 @@ from .serializers import (
 
 
 class CustomUserViewSet(UserViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, isRelatedToHermandad]
 
     def me(self, request, *args, **kwargs):
         serializer = CustomUserSerializer(request.user, context={"request": request})
         return Response(serializer.data)
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return self.queryset
+        return self.queryset.filter(hermandad=self.request.user.hermandad)
 
 
 class HermandadViewSet(viewsets.ModelViewSet):
@@ -55,7 +60,7 @@ class HermanoViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -66,7 +71,7 @@ class EventoViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -77,7 +82,7 @@ class EtiquetaViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -91,7 +96,7 @@ class DocumentoViewSet(viewsets.ModelViewSet):
         return {"request": self.request}
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -102,7 +107,7 @@ class PatrimonioViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -113,7 +118,7 @@ class InventarioViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -124,7 +129,7 @@ class PapeletaSitioViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -135,7 +140,7 @@ class CartaViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -146,7 +151,7 @@ class PagoViewSet(viewsets.ModelViewSet):
     permission_classes = [isRelatedToHermandad]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
 
@@ -229,9 +234,7 @@ class ImportDataView(APIView):
                 )
 
             try:
-                model = {
-                    "hermano": Hermano
-                }[model_name]
+                model = {"hermano": Hermano}[model_name]
             except KeyError:
                 return Response(
                     {"error": "Modelo no válido"}, status=status.HTTP_400_BAD_REQUEST
@@ -243,13 +246,20 @@ class ImportDataView(APIView):
             for row in csv_data:
                 if not any(row):
                     break
-                fecha_baja = row[8].strip()  # Elimina espacios en blanco alrededor del valor
+                fecha_baja = row[
+                    8
+                ].strip()  # Elimina espacios en blanco alrededor del valor
                 if fecha_baja:  # Verifica si hay un valor
                     try:
-                        fecha_baja = datetime.strptime(fecha_baja, '%Y-%m-%d').date()  # Convierte a fecha
+                        fecha_baja = datetime.strptime(
+                            fecha_baja, "%Y-%m-%d"
+                        ).date()  # Convierte a fecha
                     except ValueError:
-                        return Response({'error': 'Formato de fecha inválido para fecha_baja'}, status=status.HTTP_400_BAD_REQUEST)
-            
+                        return Response(
+                            {"error": "Formato de fecha inválido para fecha_baja"},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
                 if model_name == "hermano":
                     if fecha_baja:
                         Hermano.objects.create(
