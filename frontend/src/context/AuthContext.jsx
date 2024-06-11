@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
         if (staff) {
             setIsStaff(true);
         }
-        console.log("se ejecuta");
     }, []);
 
     const loginAction = () => {
