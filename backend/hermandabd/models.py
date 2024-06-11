@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save, post_delete
+from django.dispatch import receiver
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.utils.deconstruct import deconstructible
@@ -43,10 +45,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
 User._meta.get_field("first_name").null = False
 User._meta.get_field("first_name").blank = False
 User._meta.get_field("last_name").null = False
 User._meta.get_field("last_name").blank = False
+
 
 class Hermano(models.Model):
     nombre = models.CharField(max_length=50)
@@ -62,7 +66,7 @@ class Hermano(models.Model):
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     iban = models.CharField(max_length=24)
     localidad = models.CharField(max_length=50)
-    numero_hermano = models.PositiveIntegerField(validators=[MaxValueValidator(999999)])
+    numero_hermano = models.PositiveIntegerField(validators=[MaxValueValidator(999999)], unique=True, blank=True, null=True)
     provincia = models.CharField(max_length=50)
     telefono = models.CharField(max_length=12)
     titular_cuenta_bancaria = models.CharField(max_length=150)
@@ -70,6 +74,25 @@ class Hermano(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+@receiver(pre_save, sender=Hermano)
+def asignar_numero_hermano(sender, instance, **kwargs):
+    if instance.numero_hermano is None:
+        max_numero = Hermano.objects.filter(hermandad=instance.hermandad).aggregate(
+            models.Max("numero_hermano")
+        )["numero_hermano__max"]
+        instance.numero_hermano = (max_numero or 0) + 1
+
+
+@receiver(post_delete, sender=Hermano)
+def actualizar_numeros(sender, instance, **kwargs):
+    hermanos_a_actualizar = Hermano.objects.filter(
+        hermandad=instance.hermandad, numero_hermano__gt=instance.numero_hermano
+    )
+    for hermano in hermanos_a_actualizar:
+        hermano.numero_hermano -= 1
+        hermano.save()
 
 
 class Evento(models.Model):
