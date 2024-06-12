@@ -35,6 +35,7 @@ import { AuthProvider } from './context/AuthContext';
 import { UsuarioHermandadFormPage } from './pages/UsuarioHermandadFormPage.jsx';
 import { AdminRoute } from './components/AdminRoute.jsx';
 import { ImportarBD } from './pages/BD/ImportarBD.jsx';
+import { Usuarios } from './pages/Usuarios.jsx';
 
 
 
@@ -60,6 +61,8 @@ function App() {
             <Routes>
               <Route path='/' element={<MainContent />} /> {/* Por ahora se deja así pero en verdad se ponen en pages */}
               <Route path='/register' element={<RegisterFormPage />} />
+              <Route path='/register/:id' element={<RegisterFormPage />} />
+              <Route path='/users' element={<Usuarios />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/activate/:uid/:token' element={<ActivateAccountPage />} />
               <Route path='/usuarioHermandad' element={<AdminRoute element={UsuarioHermandadFormPage} />}/>

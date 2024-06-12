@@ -2,14 +2,17 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { registerAccount } from '../api/auth.api';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export function RegisterFormPage() {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const navigate = useNavigate();
-
+    const params = useParams();
     const onSubmit = handleSubmit(async user => {
         try {
+            if (params.id){
+                user.hermandad = params.id
+            }
             const success = await registerAccount(user);
             if (success.status == 201) {
                 toast.success("Cuenta creada con éxito, ahora activa la cuenta");

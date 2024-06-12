@@ -35,12 +35,19 @@ class Hermandad(models.Model):
 
 
 class User(AbstractUser):
+    GESTOR = "GS"
+    SECRETRARIO = "SE"
+    MAYORDOMO = "MA"
+    ROLES = {
+        GESTOR: "Gestor",
+        SECRETRARIO: "Secretario",
+        MAYORDOMO: "Mayordomo",
+    }
     email = models.EmailField(unique=True, blank=False, null=False)
-    # first_name = models.CharField(max_length=150, blank=False, null=False)
-    # last_name = models.CharField(max_length=150, blank=False, null=False)
     hermandad = models.ForeignKey(
         Hermandad, on_delete=models.CASCADE, blank=True, null=True
     )
+    rol = models.CharField(max_length=2, choices=ROLES, null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -66,7 +73,9 @@ class Hermano(models.Model):
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     iban = models.CharField(max_length=24)
     localidad = models.CharField(max_length=50)
-    numero_hermano = models.PositiveIntegerField(validators=[MaxValueValidator(999999)], unique=True, blank=True, null=True)
+    numero_hermano = models.PositiveIntegerField(
+        validators=[MaxValueValidator(999999)], unique=True, blank=True, null=True
+    )
     provincia = models.CharField(max_length=50)
     telefono = models.CharField(max_length=12)
     titular_cuenta_bancaria = models.CharField(max_length=150)
@@ -123,7 +132,7 @@ class Documento(models.Model):
 
     def __str__(self):
         return self.nombre
-    
+
     def delete(self, *args, **kwargs):
         self.archivo.delete()
         super().delete(*args, **kwargs)

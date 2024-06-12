@@ -66,7 +66,11 @@ DJOSER = {
         'token_create': 'hermandabd.serializers.CustomTokenCreateSerializer',
         'user': 'hermandabd.serializers.CustomUserSerializer',
         'current_user': 'hermandabd.serializers.CustomUserSerializer',
+        'user_create': 'hermandabd.serializers.CustomUserCreateSerializer',
     },
+    'VIEWSET_MAPPING': {
+        'users': 'hermandabd.views.CustomUserViewSet',
+    }
 }
 
 PROTOCOL = "http"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getHermandades } from '../api/hermandad.api';
-import { addHermandadUsuario, getUser, getUsers } from '../api/auth.api';
+import { modificarUsuario, getUser, getUsers } from '../api/auth.api';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -25,7 +25,7 @@ export function UsuarioHermandadFormPage() {
         const user = await getUser(formData.user);
         const data = user.data;
         data.hermandad = formData.hermandad;
-        const response = await addHermandadUsuario(formData.user, data);
+        const response = await modificarUsuario(formData.user, data);
         if (response.status == 200){
             toast.success("Usuario asociado con éxito a la hermandad");
         } else {

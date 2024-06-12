@@ -15,7 +15,7 @@ authApi.interceptors.request.use(
     error => {
         return Promise.reject(error);
     }
-); 
+);
 export const registerAccount = async (user) => {
     try {
         const response = await authApi.post("/api/v1/users/", user);
@@ -71,6 +71,7 @@ export const getCurrentUser = async () => {
             setCurrentUser(user);
             setHermandadUsuario(response.data.hermandad);
             setStaff(response.data.is_staff);
+            setUserRol(response.data.rol);
         })
         .catch(error => {
             unsetCurrentUser();
@@ -82,6 +83,7 @@ export const getCurrentUser = async () => {
                     error.response.data["detail"] === "User inactive or deleted."
                 ) {
                     /* dispatch(push("/resend_activation")); */
+                    toast.info("El usuario está desactivado, comprueba tu correo y activa la cuenta");
                 }
             } else {
                 console.error(error);
@@ -105,22 +107,23 @@ export const setStaff = staff => {
     localStorage.setItem("staff", staff);
 }
 
-export const logout = () => {
-    
-    authApi.post("/api/v1/token/logout/");
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("hermandad_usuario");
-    localStorage.removeItem("staff");
-    toast.success("Sesión cerrada con éxito");
-    
-};
+export const setUserRol = userRol => {
+    localStorage.setItem("user_rol", userRol);
+}
 
 export const unsetCurrentUser = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user");
     localStorage.removeItem("hermandad_usuario");
     localStorage.removeItem("staff");
+    localStorage.removeItem("user_rol");
+};
+
+export const logout = () => {
+
+    authApi.post("/api/v1/token/logout/");
+    unsetCurrentUser();
+
 };
 
 export const getUsers = async () => {
@@ -133,7 +136,7 @@ export const getUser = async (username) => {
     return response;
 }
 
-export const addHermandadUsuario = async (username,data) => {
-    const response = await authApi.put(`/api/v1/users/${username}/`,data);
+export const modificarUsuario = async (username, data) => {
+    const response = await authApi.put(`/api/v1/users/${username}/`, data);
     return response;
 }
