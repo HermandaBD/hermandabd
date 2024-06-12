@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [hermandadUsuario, setHermandadUsuario] = useState(null);
     const [isStaff, setIsStaff] = useState(false);
+    const [rol, setRol] = useState(''); // GS (Gestor), SE (Secretario), MA (Mayordomo)
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
         if (token) {
@@ -19,6 +20,10 @@ const AuthProvider = ({ children }) => {
         if (staff) {
             setIsStaff(true);
         }
+        const userRol = localStorage.getItem('user_rol');
+        if (userRol) {
+            setRol(userRol)
+        }
     }, []);
 
     const loginAction = () => {
@@ -27,10 +32,13 @@ const AuthProvider = ({ children }) => {
 
     const logoutAction = () => {
         setIsAuthenticated(false);
+        setHermandadUsuario(null);
+        setIsStaff(false);
+        setRol('');
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, hermandadUsuario, isStaff, loginAction, logoutAction }}>
+        <AuthContext.Provider value={{ isAuthenticated, hermandadUsuario, isStaff, rol, loginAction, logoutAction }}>
             {children}
         </AuthContext.Provider>
     );

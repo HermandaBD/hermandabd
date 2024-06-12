@@ -14,13 +14,16 @@ router.register("papeletasitios", PapeletaSitioViewSet, basename="papeletasitios
 router.register("cartas", CartaViewSet, basename="cartas")
 router.register("pagos", PagoViewSet, basename="pagos")
 router.register("users", CustomUserViewSet, basename="users")
+
 hermandabd_url_patterns = [
-    #path(r"api/v1/", include("djoser.urls")),
+    # path(r"api/v1/", include("djoser.urls")), # Cambiado por mi propio viewSet para modificar el serializer
     path(r"api/v1/", include("djoser.urls.authtoken")),
     path(
         "api/v1/export", ExportHermandadDataView.as_view(), name="export-hermandad-data"
     ),
-    path("api/v1/import/<str:model_name>/", ImportDataView.as_view(), name="upload_csv"),
+    path(
+        "api/v1/import/<str:model_name>/", ImportDataView.as_view(), name="upload_csv"
+    ),
 ]
 
 hermandabd_url_patterns += [path(r"api/v1/", include(router.urls))]

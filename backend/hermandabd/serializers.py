@@ -23,6 +23,7 @@ class CustomUserSerializer(UserSerializer):
             "last_name",
             "date_joined",
             "hermandad",
+            "rol",
             "is_staff",
             "is_superuser",
         )

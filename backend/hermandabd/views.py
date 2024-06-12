@@ -39,10 +39,10 @@ from .serializers import (
 class CustomUserViewSet(UserViewSet):
     permission_classes = [IsAuthenticated, isRelatedToHermandad]
 
-    def me(self, request, *args, **kwargs):
+    """ def me(self, request, *args, **kwargs):
         serializer = CustomUserSerializer(request.user, context={"request": request})
-        return Response(serializer.data)
-
+        return Response(serializer.data) """
+        
     def get_queryset(self):
         if self.request.user.is_superuser:
             return self.queryset

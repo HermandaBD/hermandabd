@@ -9,7 +9,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logoutAction, isAuthenticated, hermandadUsuario } = useContext(AuthContext);
+  const { logoutAction, isAuthenticated, hermandadUsuario, rol } = useContext(AuthContext);
 
   const onLogout = () => {
     logout();
@@ -38,6 +38,10 @@ export function Header() {
               <Link to="/pagos" className={linkClass("/pagos")}>Mayordomía</Link>
               <Link to="/inventarios" className={linkClass("/inventarios")}>Archivo</Link>
               <Link to="/documentos" className={linkClass("/documentos")}>Documentos</Link>
+              {rol == 'GS' ?
+                <Link to="/users" className={linkClass("/users")}>Usuarios</Link>
+                : <></>
+              }
             </nav>
           </div>
           <Menu as="div" className="relative inline-block text-left">

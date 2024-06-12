@@ -7,6 +7,7 @@ export function MePage() {
         async function getMe() {
             const res = await getMeLogin();
             setMe(res);
+            console.log(res);
         }
         getMe();
     },[]);
