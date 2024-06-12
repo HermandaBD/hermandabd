@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getEtiquetas } from "../../api/etiqueta.api";
 import { EtiquetaList } from "../../components/etiqueta/EtiquetaList";
 import { useNavigate } from "react-router-dom";
+import { Cargando } from "../../components/Cargando";
 
 export function EtiquetasPage() {
     const [etiquetas, setEtiquetas] = useState([]);
@@ -23,7 +24,7 @@ export function EtiquetasPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) return <Cargando/>;
     if (error) return <div>Error: {error}</div>;
 
     return (

@@ -74,7 +74,7 @@ class Hermano(models.Model):
     iban = models.CharField(max_length=24)
     localidad = models.CharField(max_length=50)
     numero_hermano = models.PositiveIntegerField(
-        validators=[MaxValueValidator(999999)], unique=True, blank=True, null=True
+        validators=[MaxValueValidator(999999)], blank=True, null=True
     )
     provincia = models.CharField(max_length=50)
     telefono = models.CharField(max_length=12)

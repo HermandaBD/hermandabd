@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCartas } from "../../api/carta.api";
 import { CartaList } from "../../components/carta/CartaList";
 import { useNavigate } from "react-router-dom";
+import { Cargando } from "../../components/Cargando";
 
 
 export function CartasPage() {
@@ -24,7 +25,7 @@ export function CartasPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) return <Cargando/>;
     if (error) return <div>Error: {error}</div>;
 
     return (

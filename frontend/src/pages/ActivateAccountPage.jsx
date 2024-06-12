@@ -5,6 +5,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { activateAccount } from '../api/auth.api';
 import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Cargando } from '../components/Cargando';
 
 export function ActivateAccountPage() {
   const [state, setState] = useState('');
@@ -36,14 +37,7 @@ export function ActivateAccountPage() {
 
   if (loading) {
     return (
-      <Container>
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
-          <CircularProgress />
-          <Typography variant="h6" color="textSecondary" mt={2}>
-            Cargando...
-          </Typography>
-        </Box>
-      </Container>
+      <Cargando/>
     );
   }
 

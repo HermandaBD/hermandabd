@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getDocumentos } from "../../api/documento.api";
 import { DocumentoList } from "../../components/documento/DocumentoList";
+import { Cargando } from "../../components/Cargando";
 
 export function DocumentosPage() {
     const [documentos, setDocumentos] = useState([]);
@@ -21,7 +22,7 @@ export function DocumentosPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) return <Cargando />;
     if (error) return <div>Error: {error}</div>;
     return (
         <div className='max-w-4xl mx-auto my-5'>
