@@ -7,7 +7,7 @@ from djoser.serializers import (
 )
 from rest_framework import serializers
 from .models import *
-
+import re
 
 User = get_user_model()
 
@@ -30,7 +30,7 @@ class CustomUserSerializer(UserSerializer):
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
-        if not user.is_superuser and value != user.hermandad:
+        if not user.is_superuser and value != user.hermandad and value is not None:
             raise serializers.ValidationError(
                 "No tiene permiso para agregar un usuario a esta hermandad."
             )
@@ -92,6 +92,18 @@ class HermanoSerializer(serializers.ModelSerializer):
             )
         return value
 
+    """ def validate_dni(self, value):
+        REGEXP = "[0-9]{8}[A-Z]"
+        DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
+        INVALIDOS = {"00000000T", "00000001R", "99999999R"}
+        if (
+            value in INVALIDOS
+            or re.match(REGEXP, value) is not None
+            or value[8] == DIGITO_CONTROL[int(value[0:8]) % 23]
+        ):
+            raise serializers.ValidationError("El dni insertado no es válido")
+        return value """
+
 
 class EventoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -129,7 +141,15 @@ class DocumentoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Documento
-        fields = ["id", "nombre", "archivo", "hermandad", "etiquetas", "fecha_subida"]
+        fields = [
+            "id",
+            "nombre",
+            "archivo",
+            "mime_type",
+            "hermandad",
+            "etiquetas",
+            "fecha_subida",
+        ]
 
     def get_archivo_url(self, obj):
         request = self.context.get("request")

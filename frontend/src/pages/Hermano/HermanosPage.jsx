@@ -84,7 +84,7 @@ export function HermanosPage() {
                     placeholder="Buscar..."
                     className="mb-4 p-2 border border-black rounded"
                 />
-                <HelpOutlineRoundedIcon onClick={() => setShowModal(true)} className="cursor-pointer" /> {/* TODO hover o clic para mostrar el popup */}
+                <HelpOutlineRoundedIcon onClick={() => setShowModal(true)} className="cursor-pointer" /> 
             </div>
             <table {...getTableProps()} className="min-w-full bg-burdeos rounded-lg outline outline-black ">
                 <thead>

@@ -118,7 +118,8 @@ class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=200)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
-
+    color = models.CharField(max_length=7, default='#000000')
+    
     def __str__(self):
         return self.nombre
 
@@ -126,6 +127,7 @@ class Etiqueta(models.Model):
 class Documento(models.Model):
     nombre = models.CharField(max_length=200)
     archivo = models.FileField(upload_to=path_and_rename)
+    mime_type = models.CharField(max_length=100)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     etiquetas = models.ManyToManyField(Etiqueta, related_name="documentos", blank=True)
     fecha_subida = models.DateTimeField(auto_now_add=True)
