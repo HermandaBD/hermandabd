@@ -40,9 +40,9 @@ export function EventoFormPage() {
         async function cargarEvento() {
             if (params.id) {
                 const { data } = await getEvento(params.id)
-                setValue('descripcion', data.descripcion)
-                setValue('fecha_inicio', formatDatetimeLocal(data.fecha_inicio))
-                setValue('fecha_fin', formatDatetimeLocal(data.fecha_fin))
+                setValue('title', data.title)
+                setValue('start', formatDatetimeLocal(data.start))
+                setValue('end', formatDatetimeLocal(data.end))
                 setValue('hermandad', data.hermandad)
             }
         }
@@ -52,36 +52,36 @@ export function EventoFormPage() {
     return (
         <div className='max-w-xl mx-auto my-5'>
             <form onSubmit={onSubmit}>
-                <label htmlFor="descripcion">Descripción</label>
+                <label htmlFor="title">Descripción</label>
                 <input
                     type="text"
-                    name="descripcion"
-                    id="descripcion"
+                    name="title"
+                    id="title"
                     className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
                     placeholder="Descripción del evento"
-                    {...register('descripcion', { required: true, maxLength: 100 })}
+                    {...register('title', { required: true, maxLength: 100 })}
                 />
-                {errors.descripcion && <span>Este campo es obligatorio y debe tener un máximo de 100 caracteres</span>}
+                {errors.title && <span>Este campo es obligatorio y debe tener un máximo de 100 caracteres</span>}
 
-                <label htmlFor="fecha_inicio">Fecha de inicio</label>
+                <label htmlFor="start">Fecha de inicio</label>
                 <input
                     type="datetime-local"
-                    name="fecha_inicio"
-                    id="fecha_inicio"
+                    name="start"
+                    id="start"
                     className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
-                    {...register('fecha_inicio', { required: true })}
+                    {...register('start', { required: true })}
                 />
-                {errors.fecha_inicio && <span>Este campo es obligatorio</span>}
+                {errors.start && <span>Este campo es obligatorio</span>}
 
-                <label htmlFor="fecha_fin">Fecha de fin</label>
+                <label htmlFor="end">Fecha de fin</label>
                 <input
                     type="datetime-local"
-                    name="fecha_fin"
-                    id="fecha_fin"
+                    name="end"
+                    id="end"
                     className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
-                    {...register('fecha_fin', { required: true })}
+                    {...register('end', { required: true })}
                 />
-                {errors.fecha_fin && <span>Este campo es obligatorio</span>}
+                {errors.end && <span>Este campo es obligatorio</span>}
 
                 <input type="hidden" id="hermandad" name="hermandad" value={hermandad}
                     {...register('hermandad')} />

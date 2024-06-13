@@ -8,7 +8,6 @@ export function EventoList({evento}) {
         <tr onClick={() =>{
             navigate(`/eventos/${evento.id}`)
         }} >
-            <td className="py-2 px-4 border-b">{evento.hermandad}</td>
             <td className="py-2 px-4 border-b">{evento.descripcion}</td>
             <td className="py-2 px-4 border-b">{evento.fecha_inicio}</td>
             <td className="py-2 px-4 border-b">{evento.fecha_fin}</td>

@@ -1,55 +1,87 @@
 import React, { useEffect, useState } from "react";
 import { getEventos } from "../../api/evento.api";
-import { EventoList } from "../../components/evento/EventoList";
-import { useNavigate } from "react-router-dom";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from "@fullcalendar/core/locales/es";
 import { Cargando } from "../../components/Cargando";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export function EventosPage() {
-    const [eventos, setEventos] = useState([]);
+    const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
-
     useEffect(() => {
-        async function fetchData() {
+        async function getEvents() {
             try {
-                const data = await getEventos();
-                setEventos(data.data);
+                const response = await getEventos();
+                setEvents(response.data);
             } catch (error) {
-                setError(error.message);
+                console.error(error);
             } finally {
                 setLoading(false);
             }
         }
-        fetchData();
+        getEvents();
     }, []);
 
-    if (loading) return <Cargando />;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) return <Cargando />
 
     return (
-        <div className='max-w-4xl mx-auto my-5'>
-            <h1 className="text-2xl font-bold mb-5">Listado de Eventos</h1>
-            <table className="min-w-full bg-red-100 text-black border border-gray-200">
-                <thead>
-                    <tr>
-                        <th className="py-2 px-4 border-b">Hermandad</th>
-                        <th className="py-2 px-4 border-b">Descripcion</th>
-                        <th className="py-2 px-4 border-b">Fecha inicio</th>
-                        <th className="py-2 px-4 border-b">Fecha fin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {eventos.map(evento => (
-                        <EventoList key={evento.id} evento={evento}/>
-                    ))}
-                </tbody>
-            </table>
-            <button onClick={() => {
-                navigate('/evento')
-            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Evento</button>
-            
+        <div className="p-5 mx-56 ">
+            <button
+                className="bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center mb-4 hover:bg-indigo-600 transition duration-300"
+                onClick={() => navigate('/evento')}
+            >
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Nuevo evento
+            </button>
+            <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                locale={esLocale}
+                initialView="dayGridMonth"
+                events={events}
+                eventContent={renderEventContent}
+                eventMouseEnter={(info) => {
+                    const tooltip = document.createElement('div');
+                    tooltip.innerHTML = `
+                        <strong>Titulo:</strong> ${info.event.title}<br>
+                        <strong>Inicio:</strong> ${info.event.start.toLocaleString()}<br>
+                        <strong>Final:</strong> ${info.event.end ? info.event.end.toLocaleString() : ''}
+                    `;
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.backgroundColor = 'white';
+                    tooltip.style.border = '1px solid black';
+                    tooltip.style.padding = '10px';
+                    tooltip.style.zIndex = '1000';
+                    tooltip.style.pointerEvents = 'none';
+                    tooltip.classList.add('fc-tooltip');
+
+                    document.body.appendChild(tooltip);
+
+                    info.el.addEventListener('mousemove', (e) => {
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                    });
+                }}
+                eventMouseLeave={() => {
+                    document.querySelectorAll('.fc-tooltip').forEach(el => el.remove());
+                }}
+            />
         </div>
     );
+};
+
+function renderEventContent(eventInfo) {
+    return (
+        <>
+            {/* <b>{eventInfo.timeText}</b> */}
+            <i>{eventInfo.event.title}</i>
+        </>
+    )
 }
+
 
