@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getEventos } from "../../api/evento.api";
 import { EventoList } from "../../components/evento/EventoList";
 import { useNavigate } from "react-router-dom";
+import { Cargando } from "../../components/Cargando";
 
 export function EventosPage() {
     const [eventos, setEventos] = useState([]);
@@ -23,7 +24,7 @@ export function EventosPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) return <Cargando />;
     if (error) return <div>Error: {error}</div>;
 
     return (

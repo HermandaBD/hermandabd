@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { getInventarios } from "../../api/inventario.api";
-import { InventarioList } from "../../components/inventario/InventarioList";
 import { useNavigate } from "react-router-dom";
-
+import { useTable, useGlobalFilter, useSortBy } from 'react-table';
+import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
+import { Modal } from "../../components/Modal";
+import { Cargando } from "../../components/Cargando";
 
 export function InventariosPage() {
     const [inventarios, setInventarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -24,31 +27,98 @@ export function InventariosPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: 'Nombre',
+                accessor: 'nombre'
+            },
+            {
+                Header: 'Descripción',
+                accessor: 'descripcion'
+            },
+            {
+                Header: 'Ubicación',
+                accessor: 'ubicacion'
+            }
+        ],
+        []
+    );
+
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+        setGlobalFilter,
+        state
+    } = useTable(
+        {
+            columns,
+            data: inventarios,
+        },
+        useGlobalFilter,
+        useSortBy
+    );
+
+    if (loading) return <Cargando />;
     if (error) return <div>Error: {error}</div>;
 
     return (
         <div className='max-w-4xl mx-auto my-5'>
             <h1 className="text-2xl font-bold mb-5">Listado de Inventarios</h1>
-            <table className="min-w-full bg-red-100 text-black border border-gray-200">
+            <div className="flex justify-between pr-5">
+                <input
+                    value={state.globalFilter || ''}
+                    onChange={e => setGlobalFilter(e.target.value)}
+                    placeholder="Buscar..."
+                    className="mb-4 p-2 border border-black rounded"
+                />
+                <HelpOutlineRoundedIcon onClick={() => setShowModal(true)} className="cursor-pointer" /> {/* TODO hover o clic para mostrar el popup */}
+            </div>
+            <table {...getTableProps()} className="min-w-full bg-burdeos rounded-lg outline outline-black">
                 <thead>
-                    <tr>
-                        <th className="py-2 px-4 border-b">Nombre</th>
-                        <th className="py-2 px-4 border-b">Descripcion</th>
-                        <th className="py-2 px-4 border-b">Ubicacion</th>
-                        <th className="py-2 px-4 border-b">Hermandad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {inventarios.map(inventario => (
-                        <InventarioList key={inventario.id} inventario={inventario}/>
+                    {headerGroups.map(headerGroup => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map(column => (
+                                <th
+                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                    className={`py-2 px-4 text-white  ${column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : ''}`}
+                                >
+                                    {column.render('Header')}
+                                </th>
+                            ))}
+                        </tr>
                     ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                    {rows.map((row, index) => {
+                        prepareRow(row);
+                        const rowClassName = index % 2 === 0 ? 'bg-white' : 'bg-sandy';
+                        const { key, ...rowProps } = row.getRowProps();
+                        return (
+                            <tr key={key} {...rowProps} onClick={() => navigate(`/inventarios/${row.original.id}`)} className={`cursor-pointer ${rowClassName}`}>
+                                {row.cells.map(cell => (
+                                    <td {...cell.getCellProps()} className="py-2 px-4 border-b">{cell.render('Cell')}</td>
+                                ))}
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
-            <button onClick={() => {
-                navigate('/inventario')
-            }} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3" >Crear Inventario</button>
-            
+            {/* <button onClick={() => navigate('/inventario')} className="bg-indigo-500 font-bold p-3 rounded-lg block w-50 mt-3">
+                Crear Inventario
+            </button> */}
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+                <div>
+                    <h2 className="text-xl font-bold mb-4">Información de ayuda</h2>
+                    <p> Haz click en una cabecera para ordenar el listado por el campo seleccionado. <br />
+                        La búsqueda se realiza en todos los campos, devuelve los resultados más similares. <br />
+                        Haciendo click en la fila entras a ver los detalles.
+                    </p>
+                </div>
+            </Modal>
         </div>
     );
 }

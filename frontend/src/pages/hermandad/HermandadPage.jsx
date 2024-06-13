@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api";
 import { HermandadList } from "../../components/hermandad/HermandadList";
 import { useNavigate } from "react-router-dom";
+import { Cargando } from "../../components/Cargando";
 
 export function HermandadPage() {
     const [hermandades, setHermandades] = useState([]);
@@ -23,7 +24,7 @@ export function HermandadPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) return <Cargando/>;
     if (error) return <div>Error: {error}</div>;
 
     return (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getPapeletas } from "../../api/papeleta.api";
 import { PapeletaList } from "../../components/papeleta/PapeletaList";
 import { useNavigate } from "react-router-dom";
+import { Cargando } from "../../components/Cargando";
 
 export function PapeletasPage() {
     const [papeletas, setPapeletas] = useState([]);
@@ -23,7 +24,7 @@ export function PapeletasPage() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) return <Cargando />;
     if (error) return <div>Error: {error}</div>;
 
     return (

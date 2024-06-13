@@ -37,6 +37,7 @@ export function Header() {
               <Link to="/hermanos" className={linkClass("/hermanos")}>Hermanos</Link>
               <Link to="/pagos" className={linkClass("/pagos")}>Mayordomía</Link>
               <Link to="/inventarios" className={linkClass("/inventarios")}>Archivo</Link>
+              <Link to="/patrimonios" className={linkClass("/patrimonios")}>Patrimonio</Link>
               <Link to="/documentos" className={linkClass("/documentos")}>Documentos</Link>
               {rol == 'GS' ?
                 <Link to="/users" className={linkClass("/users")}>Usuarios</Link>

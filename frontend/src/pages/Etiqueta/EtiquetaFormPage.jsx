@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { createEtiqueta, updateEtiqueta, deleteEtiqueta, getEtiqueta } from "../../api/etiqueta.api.js";
-import { useEffect, useState } from "react";
-import { getHermandades } from "../../api/hermandad.api.js";
+import { useEffect } from "react";
 
 export function EtiquetaFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
@@ -13,11 +12,9 @@ export function EtiquetaFormPage() {
     const onSubmit = handleSubmit(async data => {
         try {
             if (params.id) {
-                console.log('Actualizando'); //RUD
-                await updateEtiqueta(params.id, data)
+                await updateEtiqueta(params.id, data);
             } else {
                 await createEtiqueta(data);
-                console.log('Crear etiqueta');
             }
             navigate("/etiquetas");
         } catch (error) {
@@ -25,18 +22,18 @@ export function EtiquetaFormPage() {
         }
     });
 
-    useEffect(() => { //RUD
+    useEffect(() => {
         async function cargarEtiqueta() {
             if (params.id) {
-                const { data } = await getEtiqueta(params.id)
-
-                setValue('nombre', data.nombre)
-                setValue('descripcion', data.descripcion)
-                setValue('hermandad', data.hermandad)
+                const { data } = await getEtiqueta(params.id);
+                setValue('nombre', data.nombre);
+                setValue('descripcion', data.descripcion);
+                setValue('hermandad', data.hermandad);
+                setValue('color', data.color);
             }
         }
         cargarEtiqueta();
-    }, [])
+    }, [params.id, setValue]);
 
     return (
         <div className='max-w-xl mx-auto my-5'>
@@ -63,19 +60,31 @@ export function EtiquetaFormPage() {
                 />
                 {errors.descripcion && <span>Este campo es obligatorio y debe tener un máximo de 200 caracteres</span>}
 
-                <input type="hidden" id="hermandad" name="hermandad" value={hermandad}
-                    {...register('hermandad')} />
+                <label htmlFor="color">Color</label>
+                <input
+                    type="color"
+                    name="color"
+                    id="color"
+                    className="p-3 rounded-lg block w-full my-3"
+                    {...register('color', { required: true })}
+                />
+                {errors.color && <span>Este campo es obligatorio</span>}
 
-                <br />
+                <input type="hidden" id="hermandad" name="hermandad" value={hermandad} {...register('hermandad')} />
+
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Etiqueta</button>
             </form>
-            {params.id && <button onClick={async () => {
-                const accepted = window.confirm('¿Estás seguro?')
-                if (accepted) {
-                    await deleteEtiqueta(params.id);
-                    navigate("/etiquetas");
-                }
-            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>}
+            {params.id && (
+                <button onClick={async () => {
+                    const accepted = window.confirm('¿Estás seguro?');
+                    if (accepted) {
+                        await deleteEtiqueta(params.id);
+                        navigate("/etiquetas");
+                    }
+                }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">
+                    Eliminar
+                </button>
+            )}
         </div>
     );
 }

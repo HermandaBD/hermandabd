@@ -74,7 +74,7 @@ class Hermano(models.Model):
     iban = models.CharField(max_length=24)
     localidad = models.CharField(max_length=50)
     numero_hermano = models.PositiveIntegerField(
-        validators=[MaxValueValidator(999999)], unique=True, blank=True, null=True
+        validators=[MaxValueValidator(999999)], blank=True, null=True
     )
     provincia = models.CharField(max_length=50)
     telefono = models.CharField(max_length=12)
@@ -118,7 +118,8 @@ class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=200)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
-
+    color = models.CharField(max_length=7, default='#000000')
+    
     def __str__(self):
         return self.nombre
 
@@ -126,6 +127,7 @@ class Etiqueta(models.Model):
 class Documento(models.Model):
     nombre = models.CharField(max_length=200)
     archivo = models.FileField(upload_to=path_and_rename)
+    mime_type = models.CharField(max_length=100)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     etiquetas = models.ManyToManyField(Etiqueta, related_name="documentos", blank=True)
     fecha_subida = models.DateTimeField(auto_now_add=True)

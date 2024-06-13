@@ -25,6 +25,8 @@ export function UsuarioHermandadFormPage() {
         const user = await getUser(formData.user);
         const data = user.data;
         data.hermandad = formData.hermandad;
+        data.rol = "GS";
+        data.is_staff = true;
         const response = await modificarUsuario(formData.user, data);
         if (response.status == 200){
             toast.success("Usuario asociado con éxito a la hermandad");
