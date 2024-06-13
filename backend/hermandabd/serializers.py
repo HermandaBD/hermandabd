@@ -106,9 +106,12 @@ class HermanoSerializer(serializers.ModelSerializer):
 
 
 class EventoSerializer(serializers.ModelSerializer):
+    start = serializers.DateTimeField(source='fecha_inicio')
+    end = serializers.DateTimeField(source='fecha_fin')
+    title = serializers.CharField(source='descripcion')
     class Meta:
         model = Evento
-        fields = "__all__"
+        fields = ['id', 'title', 'start', 'end', 'hermandad']
 
     def validate_hermandad(self, value):
         user = self.context["request"].user
