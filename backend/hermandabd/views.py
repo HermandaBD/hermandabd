@@ -5,10 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .permissions import isRelatedToHermandad
 import csv
-from .forms import CSVUploadForm
-from django.http import HttpResponse
+from django.conf import settings
+from django.core.mail import send_mail, EmailMessage
+from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
-from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime, timedelta
+from .forms import CSVUploadForm
+from .tasks import enviar_correo_task
 from .models import (
     Hermandad,
     Hermano,
@@ -143,6 +147,39 @@ class CartaViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(hermandad=self.request.user.hermandad)
+    
+    def perform_create(self, serializer):
+        # Guardar la carta en la base de datos
+        carta = serializer.save(hermandad=self.request.user.hermandad)
+        
+        # Datos del correo
+        subject = carta.asunto
+        body = carta.cuerpo
+        recipients = [hermano.email for hermano in carta.destinatarios.all()]  
+        reply_to = self.request.data.get('reply_to')  
+        try:
+            for hermano in recipients:
+                #send_mail(subject=subject, message=body, from_email=settings.EMAIL_HOST_USER,recipient_list=[hermano],fail_silently=True)
+                email = EmailMessage(
+                    subject=subject,
+                    body=body,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=[hermano],
+                    reply_to=[reply_to],
+                )
+                email.send()
+            """ if send_date:
+                # Programar la tarea de Celery para una fecha futura
+                send_datetime = datetime.combine(send_date, datetime.min.time())
+                enviar_correo_task.apply_async(
+                    (subject, body, recipients, reply_to), eta=send_datetime)
+            else:
+                # Enviar el correo inmediatamente
+                enviar_correo_task.delay(subject, body, recipients, reply_to)
+                 """
+            return JsonResponse({'message': 'Email scheduled successfully!'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 
 
 class PagoViewSet(viewsets.ModelViewSet):

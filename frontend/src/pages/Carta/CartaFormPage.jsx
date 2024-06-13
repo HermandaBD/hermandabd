@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { createCarta, deleteCarta, updateCarta, getCarta } from "../../api/carta.api.js";
 import { useEffect, useState } from "react";
-import { getHermandades } from "../../api/hermandad.api.js";
+import { getHermandad, getHermandades } from "../../api/hermandad.api.js";
 import { getHermanos } from "../../api/hermano.api.js";
 
 export function CartaFormPage() {
@@ -10,28 +10,37 @@ export function CartaFormPage() {
     const navigate = useNavigate();
     const params = useParams(); //RUD
     const [hermanos, setHermanos] = useState([]);  // Cambiar destinatarioss a hermanos
+    const [emailHermandad, setEmailHermandad] = useState([]);  // Cambiar destinatarioss a hermanos
+    const [fecha, setFecha] = useState('')
     const hermandad = localStorage.getItem('hermandad_usuario');
     useEffect(() => {
         async function fetchData() {
             try {
                 const hermanosResponse = await getHermanos();
                 setHermanos(hermanosResponse.data);
+
+                const hermandadResponse = await getHermandad(hermandad);
+                setEmailHermandad(hermandadResponse.data.email);
+
+                
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         }
-
         fetchData();
     }, []);
 
     const onSubmit = handleSubmit(async data => {
+        let currentDate = new Date().toJSON().slice(0, 10);
+        setFecha(currentDate);
+        data.fecha_envio = currentDate;
         try {
             if (params.id) {
-                console.log('Actualizando'); //RUD
                 await updateCarta(params.id, data)
             } else {
+
+                console.log(data);
                 await createCarta(data);
-                console.log('Crear carta');
             }
             navigate("/cartas");
         } catch (error) {
@@ -42,8 +51,8 @@ export function CartaFormPage() {
     useEffect(() => { //RUD
         async function cargarCarta() {
             if (params.id) {
-                const {data} = await getCarta(params.id)
-                
+                const { data } = await getCarta(params.id)
+
                 setValue('asunto', data.asunto)
                 setValue('cuerpo', data.cuerpo)
                 setValue('fecha_envio', data.fecha_envio)
@@ -78,17 +87,21 @@ export function CartaFormPage() {
                 />
                 {errors.cuerpo && <span>Este campo es obligatorio y debe tener un máximo de 1000 caracteres</span>}
 
-                <label htmlFor="fecha_envio">Fecha de envío</label>
+                {/* <label htmlFor="fecha_envio">Fecha de envío</label> */}
                 <input
-                    type="date"
+                    type="hidden"
                     name="fecha_envio"
                     id="fecha_envio"
-                    className="bg-zinc-700 p-3 rounded-lg block w-full my-3"
-                    {...register('fecha_envio', { required: true })}
+                    value={fecha}
+                    {...register('fecha_envio')}
                 />
-                {errors.fecha_envio && <span>Este campo es obligatorio</span>}
 
-                <input type="hidden" id="hermandad" name="hermandad" value={hermandad} />
+
+                <input type="hidden" id="hermandad" name="hermandad" value={hermandad}
+                    {...register('hermandad')} />
+
+                <input type="hidden" id="reply_to" name="reply_to" value={emailHermandad}
+                    {...register('reply_to')} />
 
                 <label htmlFor="destinatarios">Destinatarios</label>
                 <select
@@ -115,7 +128,7 @@ export function CartaFormPage() {
                     await deleteCarta(params.id);
                     navigate("/cartas");
                 }
-            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>}  
+            }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>}
         </div> //RUD
     );
 }
