@@ -18,12 +18,7 @@ pagoApi.interceptors.request.use(
 );
 
 export const createPago = async (pago) => {
-    try {
-        return await pagoApi.post('/', pago);
-    } catch (error) {
-        console.error("Failed to create Pago: ", error);
-        throw error;
-    }
+    return await pagoApi.post('/', pago);
 };
 
 export const getPagos = async () => {
@@ -54,12 +49,5 @@ export const deletePago = async (id) => {
 };
 
 export const updatePago = async (id, pago) => {
-    try {
-        return await pagoApi.put(`/${id}/`, pago);
-    } catch (error) {
-        console.error("Failed to update Pago: ", error);
-        throw error;
-    }
-
-
+    return await pagoApi.put(`/${id}/`, pago);
 }
