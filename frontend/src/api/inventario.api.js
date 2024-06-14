@@ -18,12 +18,7 @@ inventarioApi.interceptors.request.use(
 );
 
 export const createInventario = async (inventario) => {
-    try {
         return await inventarioApi.post('/', inventario);
-    } catch (error) {
-        console.error("Failed to create Inventario: ", error);
-        throw error;
-    }
 };
 
 export const getInventarios = async () => {
@@ -45,21 +40,9 @@ export const getInventario = async (id) => {
 };
 
 export const deleteInventario = async (id) => {
-    try {
         return await inventarioApi.delete(`/${id}`);
-    } catch (error) {
-        console.error("Failed to delete Inventario: ", error);
-        throw error;
-    }
 };
 
 export const updateInventario = async (id, inventario) => {
-    try {
         return await inventarioApi.put(`/${id}/`, inventario);
-    } catch (error) {
-        console.error("Failed to update Inventario: ", error);
-        throw error;
-    }
-
-
 }

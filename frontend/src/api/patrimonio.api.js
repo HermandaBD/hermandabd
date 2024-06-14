@@ -18,12 +18,7 @@ patrimonioApi.interceptors.request.use(
 );
 
 export const createPatrimonio = async (patrimonio) => {
-    try {
         return await patrimonioApi.post('/', patrimonio);
-    } catch (error) {
-        console.error("Failed to create Patrimonio: ", error);
-        throw error;
-    }
 };
 
 export const getPatrimonios = async () => {
@@ -54,12 +49,5 @@ export const deletePatrimonio = async (id) => {
 };
 
 export const updatePatrimonio = async (id, patrimonio) => {
-    try {
         return await patrimonioApi.put(`/${id}/`, patrimonio);
-    } catch (error) {
-        console.error("Failed to update Patrimonio: ", error);
-        throw error;
-    }
-
-
 }
