@@ -86,9 +86,28 @@ export const deletePapeleta = async (id) => {
     }
 };
 
-export const updatePapeleta = async (id, papeleta) => {
+export const updatePapeleta = async (id, data) => {
+    const formData = new FormData();
+
+    formData.append('nombre_evento', data.nombre_evento);
+    formData.append('ubicacion', data.ubicacion);
+    formData.append('fecha', data.fecha);
+    formData.append('hora', data.hora);
+    formData.append('puesto', data.puesto);
+    formData.append('valor', data.valor);
+    formData.append('hermano', data.hermano);
+    formData.append('hermandad', data.hermandad);
+
+    // Verificar si se adjunta un archivo en el campo diseno antes de agregarlo al formData
+    if (data.diseno && data.diseno.length > 0) {
+        formData.append('diseno', data.diseno[0]);
+    }
     try {
-        return await papeletaApi.put(`/${id}/`, papeleta);
+        return await papeletaApi.put(`/${id}/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     } catch (error) {
         console.error("Failed to update papeleta: ", error);
         throw error;

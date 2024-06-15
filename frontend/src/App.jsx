@@ -41,6 +41,7 @@ import { MenuHermanoPage } from './pages/Hermano/MenuHermanoPage.jsx';
 import { MenuInventarioPage } from './pages/Inventario/MenuInventarioPage.jsx';
 import { MenuDocumentoPage } from './pages/Documento/MenuDocumentoPage.jsx';
 import { MenuMayordomiaPage } from './pages/Pago/MenuMayordomiaPage.jsx';
+import { ExportarBD } from './pages/BD/ExportarBD.jsx';
 
 
 
@@ -107,6 +108,7 @@ function App() {
               <Route path='/documento/menu' element={<PrivateRoute element={MenuDocumentoPage} />} />
               <Route path='/documentos' element={<PrivateRoute element={DocumentosPage} />} />
               <Route path='/import' element={<PrivateRoute element={ImportarBD} />} />
+              <Route path='/export' element={<PrivateRoute element={ExportarBD} />} />
             </Routes>
           </main>
           <Footer />

@@ -10,6 +10,6 @@ export function ExportarBD() {
         return response
     };
 
-    return <button className='bg-indigo-500' onClick={() => exportar()}>Descargar BD</button>
+    return <button className='bg-persian' onClick={() => exportar()}>Descargar BD</button>
     
 }
