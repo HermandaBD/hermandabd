@@ -45,6 +45,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             "username",
             "password",
             "email",
+            "rol",
             "first_name",
             "last_name",
             "hermandad",
