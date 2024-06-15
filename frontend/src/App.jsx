@@ -73,8 +73,8 @@ function App() {
               <Route path='/usuarioHermandad' element={<AdminRoute element={UsuarioHermandadFormPage} />}/>
               <Route path='/me' element={<PrivateRoute element={MePage} />} />
               <Route path='/hermandad' element={<PrivateRoute element={HermandadFormPage} />} />
-              <Route path='/hermandades' element={<PrivateRoute element={HermandadPage} />} />
-              <Route path='/hermandades/:id' element={<PrivateRoute element={HermandadFormPage} />} />
+              <Route path='/hermandades' element={<AdminRoute element={HermandadPage} />} />
+              <Route path='/hermandades/:id' element={<AdminRoute element={HermandadFormPage} />} />
               <Route path='/hermano' element={<PrivateRoute element={HermanoFormPage} />} />
               <Route path='/hermano/bancario' element={<PrivateRoute element={HermanosBancarioPage} />} />
               <Route path='/hermano/menu' element={<PrivateRoute element={MenuHermanoPage} />} />
