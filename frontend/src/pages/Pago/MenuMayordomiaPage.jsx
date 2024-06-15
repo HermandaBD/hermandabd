@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function MenuMayordomiaPage() {
     const [showModal, setShowModal] = useState(false);
-    
+
     return (
         <>
             <div className="mx-auto my-5 p-1 max-w-6xl ">
@@ -21,36 +21,38 @@ export function MenuMayordomiaPage() {
             <div className="mx-auto p-1 my-1 xl:max-w-6xl l:max-w-xl xl:grid grid-cols-12">
                 <div className='col-start-1 col-span-4'>
                     <div className="grid grid-cols-1 gap-10 mb-5">
-                            <MenuButton  icon={faPlus} text="AÑADIR PAGO" link="/pago" />
-                            <MenuButton icon={faList} text="LISTADO DE PAGOS" link="/pagos"/>
-                            {/* <MenuButton icon={faEnvelope} text="ENVIAR CARTA" link="/carta"/> */}
-                            {/* <MenuButton icon={faMoneyBill} text="LISTADO DATOS BANCO" link="/hermano/bancario"/> */}
+                        <MenuButton icon={faList} text="LISTADO DE PAGOS" link="/pagos" />
+                        <MenuButton icon={faTicketAlt} text="PAPELETAS DE SITIO" link="/papeletas" />
+                        <MenuButton icon={faList} text="LISTADO BANCARIO" link="/hermano/bancario" />
+                        {/* <MenuButton icon={faEnvelope} text="ENVIAR CARTA" link="/carta"/> */}
+                        {/* <MenuButton icon={faMoneyBill} text="LISTADO DATOS BANCO" link="/hermano/bancario"/> */}
                     </div>
                 </div>
                 <div className='col-start-9 col-span-4'>
                     <div className="grid grid-cols-1 gap-10 mb-5">
+                        <MenuButton icon={faPlus} text="AÑADIR PAGO" link="/pago" />
+                        <MenuButton icon={faPlus} text="AÑADIR PAPELETA DE SITIO" link="/papeleta" />
                         {/* <MenuButton icon={faPlus} text="AÑADIR PATRIMONIO" link="/patrimonio"/> */}
-                        <MenuButton icon={faList} text="LISTADO BANCARIO" link="/hermano/bancario"/>
                         {/* <MenuButton icon={faTicketAlt} text="SACAR PAPELETAS DE SITIO" link="/papeletas"/> */}
                     </div>
                 </div>
             </div>
             <Modal show={showModal} onClose={() => setShowModal(false)}>
-            <div>
-                <h2 className="text-xl font-bold mb-4">Información de ayuda</h2>
-                <p> Aquí se muestran las acciones que se pueden llevar a cabo relacionado con el inventario y el patrimonio. <br />
-                Para más información de cada función entrar en la sección.
-                </p>
-            </div>
-        </Modal>
+                <div>
+                    <h2 className="text-xl font-bold mb-4">Información de ayuda</h2>
+                    <p> Aquí se muestran las acciones que se pueden llevar a cabo relacionado con el inventario y el patrimonio. <br />
+                        Para más información de cada función entrar en la sección.
+                    </p>
+                </div>
+            </Modal>
         </>
     );
 }
 
 function MenuButton({ icon, text, link }) {
-    const navigate =  useNavigate();
+    const navigate = useNavigate();
     return (
-        <div onClick={()=>navigate(link)} className="relative">
+        <div onClick={() => navigate(link)} className="relative">
             <div className='bg-persian border w-full border-black rounded-md xl:p-10 lg:p-8 sm:p-5 font-bold text-white flex align-middle justify-between cursor-pointer'>
                 <FontAwesomeIcon icon={icon} className="mr-2" size='2x' />
                 <span>{text}</span>

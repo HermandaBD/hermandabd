@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getHermanos } from "../../api/hermano.api";
+import { exportBD } from "../../api/bd.api";
 import { useNavigate } from "react-router-dom";
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { Modal } from "../../components/Modal";
 import { Cargando } from "../../components/Cargando";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 export function HermanosPage() {
     const [hermanos, setHermanos] = useState([]);
@@ -12,6 +15,12 @@ export function HermanosPage() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+
+    async function exportar() {
+        const response = await exportBD();
+        expo
+        return response
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -76,7 +85,7 @@ export function HermanosPage() {
 
     return (
         <div className='max-w-4xl mx-auto my-5'>
-                <h1 className="text-2xl font-bold mb-5">Listado de Hermanos</h1>
+            <h1 className="text-2xl font-bold mb-5">Listado de Hermanos</h1>
             <div className="flex justify-between pr-5">
                 <input
                     value={state.globalFilter || ''}
@@ -84,7 +93,7 @@ export function HermanosPage() {
                     placeholder="Buscar..."
                     className="mb-4 p-2 border border-black rounded"
                 />
-                <HelpOutlineRoundedIcon onClick={() => setShowModal(true)} className="cursor-pointer" /> 
+                <HelpOutlineRoundedIcon onClick={() => setShowModal(true)} className="cursor-pointer" />
             </div>
             <table {...getTableProps()} className="min-w-full bg-burdeos rounded-lg outline outline-black ">
                 <thead>
@@ -116,6 +125,10 @@ export function HermanosPage() {
                     })}
                 </tbody>
             </table>
+
+
+            <button className='bg-persian my-5 text-white' onClick={() => exportar()}><FontAwesomeIcon icon={faDownload} className="text-xl mr-1" />Exportar hermanos</button>
+
             {/* <button onClick={() => navigate('/hermano')} className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">
                 Crear Hermano
             </button> */}

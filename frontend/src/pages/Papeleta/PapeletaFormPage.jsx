@@ -32,7 +32,16 @@ export function PapeletaFormPage() {
             }
             navigate("/papeletas");
         } catch (error) {
-            console.error("Error al crear la papeleta:", error);
+            if (error.response && error.response.status === 400) {
+                const errors = error.response.data;
+                Object.entries(errors).forEach(([field, message]) => {
+                    setError(field, { type: "manual", message: message });
+                    toast.error(message);
+                });
+            } else {
+                console.error("Error inesperado:", error);
+                toast.error("Error inesperado, por favor intenta nuevamente.");
+            }
         }
     });
 

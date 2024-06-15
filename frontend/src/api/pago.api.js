@@ -29,13 +29,20 @@ export const generatePDF = async (id) => {
 
 export const createPago = async (data) => {
     const formData = new FormData();
-    formData.append('diseno', data.diseno[0]);
     formData.append('fecha', data.fecha);
     formData.append('nombre', data.nombre);
     formData.append('descripcion', data.descripcion);
     formData.append('valor', data.valor);
-    formData.append('hermano', data.hermano);
     formData.append('hermandad', data.hermandad);
+    if (data.hermano && data.hermano.length > 0) {
+        data.hermano.forEach(hermanoId => {
+            formData.append("hermano", hermanoId);
+        });
+    }
+
+    if (data.diseno && data.diseno.length > 0) {
+        formData.append('diseno', data.diseno[0]);
+    }
 
     const response = await pagoApi.post('/', formData, {
         headers: {
