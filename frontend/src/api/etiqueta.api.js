@@ -18,12 +18,7 @@ etiquetaApi.interceptors.request.use(
 );
 
 export const createEtiqueta = async (etiqueta) => {
-    try {
         return await etiquetaApi.post('/', etiqueta);
-    } catch (error) {
-        console.error("Failed to create Etiqueta: ", error);
-        throw error;
-    }
 };
 
 export const getEtiquetas = async () => {
@@ -45,21 +40,9 @@ export const getEtiqueta = async (id) => {
 };
 
 export const deleteEtiqueta = async (id) => {
-    try {
         return await etiquetaApi.delete(`/${id}`);
-    } catch (error) {
-        console.error("Failed to delete Etiqueta: ", error);
-        throw error;
-    }
 };
 
 export const updateEtiqueta = async (id, etiqueta) => {
-    try {
-        return await etiquetaApi.put(`/${id}/`, etiqueta);
-    } catch (error) {
-        console.error("Failed to update Etiqueta: ", error);
-        throw error;
-    }
-
-
+    return await etiquetaApi.put(`/${id}/`, etiqueta);
 }

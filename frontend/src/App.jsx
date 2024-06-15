@@ -36,6 +36,11 @@ import { UsuarioHermandadFormPage } from './pages/UsuarioHermandadFormPage.jsx';
 import { AdminRoute } from './components/AdminRoute.jsx';
 import { ImportarBD } from './pages/BD/ImportarBD.jsx';
 import { Usuarios } from './pages/Usuarios.jsx';
+import { HermanosBancarioPage } from './pages/Hermano/HermanosBancarioPage.jsx';
+import { MenuHermanoPage } from './pages/Hermano/MenuHermanoPage.jsx';
+import { MenuInventarioPage } from './pages/Inventario/MenuInventarioPage.jsx';
+import { MenuDocumentoPage } from './pages/Documento/MenuDocumentoPage.jsx';
+import { MenuMayordomiaPage } from './pages/Pago/MenuMayordomiaPage.jsx';
 
 
 
@@ -62,15 +67,17 @@ function App() {
               <Route path='/' element={<MainContent />} /> {/* Por ahora se deja así pero en verdad se ponen en pages */}
               <Route path='/register' element={<RegisterFormPage />} />
               <Route path='/register/:id' element={<RegisterFormPage />} />
-              <Route path='/users' element={<Usuarios />} />
+              <Route path='/users' element={<PrivateRoute element={Usuarios} />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/activate/:uid/:token' element={<ActivateAccountPage />} />
               <Route path='/usuarioHermandad' element={<AdminRoute element={UsuarioHermandadFormPage} />}/>
               <Route path='/me' element={<PrivateRoute element={MePage} />} />
               <Route path='/hermandad' element={<PrivateRoute element={HermandadFormPage} />} />
-              <Route path='/hermandades' element={<PrivateRoute element={HermandadPage} />} />
-              <Route path='/hermandades/:id' element={<PrivateRoute element={HermandadFormPage} />} />
+              <Route path='/hermandades' element={<AdminRoute element={HermandadPage} />} />
+              <Route path='/hermandades/:id' element={<AdminRoute element={HermandadFormPage} />} />
               <Route path='/hermano' element={<PrivateRoute element={HermanoFormPage} />} />
+              <Route path='/hermano/bancario' element={<PrivateRoute element={HermanosBancarioPage} />} />
+              <Route path='/hermano/menu' element={<PrivateRoute element={MenuHermanoPage} />} />
               <Route path='/hermanos' element={<PrivateRoute element={HermanosPage} />} />
               <Route path='/hermanos/:id' element={<PrivateRoute element={HermanoFormPage} />} />
               <Route path='/evento' element={<PrivateRoute element={EventoFormPage} />} />
@@ -79,6 +86,7 @@ function App() {
               <Route path='/patrimonio' element={<PrivateRoute element={PatrimonioFormPage} />} />
               <Route path='/patrimonios' element={<PrivateRoute element={PatrimoniosPage} />} />
               <Route path='/patrimonios/:id' element={<PrivateRoute element={PatrimonioFormPage} />} />
+              <Route path='/archivo' element={<PrivateRoute element={MenuInventarioPage} />} />
               <Route path='/inventario' element={<PrivateRoute element={InventarioFormPage} />} />
               <Route path='/inventarios' element={<PrivateRoute element={InventariosPage} />} />
               <Route path='/inventarios/:id' element={<PrivateRoute element={InventarioFormPage} />} />
@@ -89,12 +97,14 @@ function App() {
               <Route path='/cartas' element={<PrivateRoute element={CartasPage} />} />
               <Route path='/cartas/:id' element={<PrivateRoute element={CartaFormPage} />} />
               <Route path='/pago' element={<PrivateRoute element={PagoFormPage} />} />
+              <Route path='/pago/menu' element={<PrivateRoute element={MenuMayordomiaPage} />} />
               <Route path='/pagos' element={<PrivateRoute element={PagosPage} />} />
               <Route path='/pagos/:id' element={<PrivateRoute element={PagoFormPage} />} />
               <Route path='/etiqueta' element={<PrivateRoute element={EtiquetaFormPage} />} />
               <Route path='/etiquetas' element={<PrivateRoute element={EtiquetasPage} />} />
               <Route path='/etiquetas/:id' element={<PrivateRoute element={EtiquetaFormPage} />} />
               <Route path='/documento' element={<PrivateRoute element={DocumentoFormPage} />} />
+              <Route path='/documento/menu' element={<PrivateRoute element={MenuDocumentoPage} />} />
               <Route path='/documentos' element={<PrivateRoute element={DocumentosPage} />} />
               <Route path='/import' element={<PrivateRoute element={ImportarBD} />} />
             </Routes>

@@ -45,6 +45,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             "username",
             "password",
             "email",
+            "rol",
             "first_name",
             "last_name",
             "hermandad",
@@ -92,23 +93,26 @@ class HermanoSerializer(serializers.ModelSerializer):
             )
         return value
 
-    """ def validate_dni(self, value):
+    def validate_dni(self, value):
         REGEXP = "[0-9]{8}[A-Z]"
         DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
         if (
             value in INVALIDOS
-            or re.match(REGEXP, value) is not None
-            or value[8] == DIGITO_CONTROL[int(value[0:8]) % 23]
+            or not re.match(REGEXP, value)
+            or value[8] != DIGITO_CONTROL[int(value[0:8]) % 23]
         ):
-            raise serializers.ValidationError("El dni insertado no es válido")
-        return value """
+            raise serializers.ValidationError("El DNI insertado no es válido ")
+        return value
 
 
 class EventoSerializer(serializers.ModelSerializer):
+    start = serializers.DateTimeField(source='fecha_inicio')
+    end = serializers.DateTimeField(source='fecha_fin')
+    title = serializers.CharField(source='descripcion')
     class Meta:
         model = Evento
-        fields = "__all__"
+        fields = ['id', 'title', 'start', 'end', 'hermandad']
 
     def validate_hermandad(self, value):
         user = self.context["request"].user

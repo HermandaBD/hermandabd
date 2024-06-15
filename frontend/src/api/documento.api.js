@@ -18,29 +18,24 @@ documentoApi.interceptors.request.use(
 );
 
 export const createDocumento = async (data) => {
-    try {
-        const formData = new FormData();
-        let mime = data.archivo[0].type;
-        formData.append('mime_type', mime.split('/')[1])
-        formData.append('archivo', data.archivo[0]);
-        formData.append('nombre', data.nombre);
-        formData.append('hermandad', data.hermandad);
-        console.log(data.etiquetas);
-        if (data.etiquetas && data.etiquetas.length > 0) {
-            data.etiquetas.forEach((etiquetaId) => {
-              formData.append('etiquetas', etiquetaId);
-            });
-          }
-        const response = await documentoApi.post('/', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+    const formData = new FormData();
+    let mime = data.archivo[0].type;
+    formData.append('mime_type', mime.split('/')[1])
+    formData.append('archivo', data.archivo[0]);
+    formData.append('nombre', data.nombre);
+    formData.append('hermandad', data.hermandad);
+    console.log(data.etiquetas);
+    if (data.etiquetas && data.etiquetas.length > 0) {
+        data.etiquetas.forEach((etiquetaId) => {
+            formData.append('etiquetas', etiquetaId);
         });
-        return response.status;
-    } catch (error) {
-        console.error("Failed to create Documento: ", error);
-        return false;
     }
+    const response = await documentoApi.post('/', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response;
 };
 
 export const getDocumentos = async () => {
