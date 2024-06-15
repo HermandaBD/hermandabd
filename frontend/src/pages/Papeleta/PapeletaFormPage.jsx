@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { createPapeleta, deletePapeleta, updatePapeleta, getPapeleta } from "../../api/papeleta.api.js";
+import { createPapeleta, deletePapeleta, updatePapeleta, getPapeleta, generatePapeleta } from "../../api/papeleta.api.js";
 import { useEffect, useState } from "react";
 import { getHermandades } from "../../api/hermandad.api.js";
 import { getHermanos } from "../../api/hermano.api.js";
@@ -35,6 +35,35 @@ export function PapeletaFormPage() {
             console.error("Error al crear la papeleta:", error);
         }
     });
+
+
+    const handleGeneratePapeleta = async (id) => {
+        try {
+            // Llamar a la función para generar el PDF
+            const pdfBlob = await generatePapeleta(id);
+
+            // Crear un objeto URL del Blob del PDF
+            const blobUrl = URL.createObjectURL(pdfBlob);
+
+            // Crear un enlace invisible para descargar el PDF
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = `papeleta_${id}.pdf`; // Nombre del archivo para descargar
+            document.body.appendChild(a);
+
+            // Simular clic en el enlace para iniciar la descarga
+            a.click();
+
+            // Limpiar después de la descarga
+            window.URL.revokeObjectURL(blobUrl);
+            a.remove();
+
+            console.log("PDF generado y descargado exitosamente");
+        } catch (error) {
+            console.error("Error al generar o descargar el PDF:", error);
+        }
+    };
 
     useEffect(() => { //RUD
         async function cargarPapeleta() {
@@ -141,6 +170,12 @@ export function PapeletaFormPage() {
                 </select>
                 {errors.hermano && <span>Este campo es obligatorio</span>}
 
+                <label htmlFor="diseno">Diseño (Si se quiere generar con un diseño importado)</label>
+                <input type="file" name="diseno" id="diseno" className="border-2 border-black p-3 rounded-lg block w-full my-3"
+                    {...register('diseno')} />
+                {errors.diseno && <span className="text-red-500">{errors.diseno.message}<br /></span>}
+
+
                 <br />
                 <button className="bg-indigo-500 font-bold p-3 rounded-lg block w-full mt-3">Guardar Papeleta de Sitio</button>
             </form>
@@ -151,6 +186,13 @@ export function PapeletaFormPage() {
                     navigate("/papeletas");
                 }
             }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3">Eliminar</button>}
+            {params.id && (
+                    <div className='xl:grid grid-cols-6 gap-4'>
+                        <button onClick={() => handleGeneratePapeleta(params.id)} className="bg-blue-500 text-white font-bold p-3 rounded-lg block w-full mt-3 col-start-3 col-span-2">
+                            Generar Papeleta PDF
+                        </button>
+                    </div>
+                )}
         </div>
     );
 }

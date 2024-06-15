@@ -24,6 +24,8 @@ hermandabd_url_patterns = [
     path(
         "api/v1/import/<str:model_name>/", ImportDataView.as_view(), name="upload_csv"
     ),
+    path('api/v1/pagos/generate_pdf/<str:id>/', generate_pdf, name='generate_pdf'),
+    path('api/v1/papeletasitios/generate_papeleta/<str:id>/', generate_papeleta, name='generate_papeleta'),
 ]
 
 hermandabd_url_patterns += [path(r"api/v1/", include(router.urls))]

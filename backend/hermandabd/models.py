@@ -169,6 +169,7 @@ class PapeletaSitio(models.Model):
     valor = models.DecimalField(max_digits=5, decimal_places=2)
     fecha = models.DateField()
     hora = models.TimeField()
+    diseno = models.FileField(upload_to=path_and_rename, null=True)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     hermano = models.ManyToManyField(Hermano)
 
@@ -192,6 +193,7 @@ class Pago(models.Model):
     descripcion = models.CharField(max_length=500)
     fecha = models.DateField()
     valor = models.DecimalField(max_digits=6, decimal_places=2)
+    diseno = models.FileField(upload_to=path_and_rename, null=True)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     hermano = models.ManyToManyField(Hermano)
 
