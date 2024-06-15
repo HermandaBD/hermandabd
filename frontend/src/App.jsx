@@ -36,6 +36,7 @@ import { UsuarioHermandadFormPage } from './pages/UsuarioHermandadFormPage.jsx';
 import { AdminRoute } from './components/AdminRoute.jsx';
 import { ImportarBD } from './pages/BD/ImportarBD.jsx';
 import { Usuarios } from './pages/Usuarios.jsx';
+import { HermanosBancarioPage } from './pages/Hermano/HermanosBancarioPage.jsx';
 
 
 
@@ -71,6 +72,7 @@ function App() {
               <Route path='/hermandades' element={<PrivateRoute element={HermandadPage} />} />
               <Route path='/hermandades/:id' element={<PrivateRoute element={HermandadFormPage} />} />
               <Route path='/hermano' element={<PrivateRoute element={HermanoFormPage} />} />
+              <Route path='/hermano/bancario' element={<PrivateRoute element={HermanosBancarioPage} />} />
               <Route path='/hermanos' element={<PrivateRoute element={HermanosPage} />} />
               <Route path='/hermanos/:id' element={<PrivateRoute element={HermanoFormPage} />} />
               <Route path='/evento' element={<PrivateRoute element={EventoFormPage} />} />

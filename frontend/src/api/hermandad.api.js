@@ -18,12 +18,7 @@ hermandadApi.interceptors.request.use(
 );
 
 export const createHermandad = async (hermandad) => {
-    try {
-        return await hermandadApi.post('/', hermandad);
-    } catch (error) {
-        console.error("Failed to create Hermandad: ", error);
-        throw error;
-    }
+    return await hermandadApi.post('/', hermandad);
 };
 
 export const getHermandades = async () => {
@@ -45,21 +40,11 @@ export const getHermandad = async (id) => {
 };
 
 export const deleteHermandad = async (id) => {
-    try {
-        return await hermandadApi.delete(`/${id}`);
-    } catch (error) {
-        console.error("Failed to delete Hermandad: ", error);
-        throw error;
-    }
+    return await hermandadApi.delete(`/${id}`);
 };
 
 export const updateHermandad = async (id, hermandad) => {
-    try {
-        return await hermandadApi.put(`/${id}/`, hermandad);
-    } catch (error) {
-        console.error("Failed to update Hermandad: ", error);
-        throw error;
-    }
 
+    return await hermandadApi.put(`/${id}/`, hermandad);
 
 }

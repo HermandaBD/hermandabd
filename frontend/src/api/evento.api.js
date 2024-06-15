@@ -18,12 +18,9 @@ eventoApi.interceptors.request.use(
 );
 
 export const createEvento = async (evento) => {
-    try {
-        return await eventoApi.post('/', evento);
-    } catch (error) {
-        console.error("Failed to create Evento: ", error);
-        throw error;
-    }
+
+    return await eventoApi.post('/', evento);
+
 };
 
 export const getEventos = async () => {
@@ -45,21 +42,13 @@ export const getEvento = async (id) => {
 };
 
 export const deleteEvento = async (id) => {
-    try {
-        return await eventoApi.delete(`/${id}`);
-    } catch (error) {
-        console.error("Failed to delete Evento: ", error);
-        throw error;
-    }
+
+    return await eventoApi.delete(`/${id}`);
+
 };
 
 export const updateEvento = async (id, evento) => {
-    try {
-        return await eventoApi.put(`/${id}/`, evento);
-    } catch (error) {
-        console.error("Failed to update Evento: ", error);
-        throw error;
-    }
 
+    return await eventoApi.put(`/${id}/`, evento);
 
 }
