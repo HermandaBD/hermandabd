@@ -26,6 +26,7 @@ export function DocumentoList({ documento }) {
             const response = await deleteDocumento(id);
             if (response.status === 204 || response.status === 200) {
                 toast.success("Documento eliminado con éxito");
+                window.location.reload();
             } else {
                 toast.error("Ocurrió un error al eliminar el archivo");
             }

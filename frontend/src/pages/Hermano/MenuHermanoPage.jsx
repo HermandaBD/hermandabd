@@ -30,7 +30,7 @@ export function MenuHermanoPage() {
                 <div className='col-start-9 col-span-4'>
                     <div className="grid grid-cols-1 gap-10 mb-5">
                         <MenuButton icon={faUserPlus} text="DAR DE ALTA HERMANO" link="/hermano" />
-                        <MenuButton icon={faUserMinus} text="DAR DE BAJA UN HERMANO" link="/hermanos" />
+                        {/* <MenuButton icon={faUserMinus} text="DAR DE BAJA UN HERMANO" link="/hermanos" /> */}
 
                     </div>
                 </div>

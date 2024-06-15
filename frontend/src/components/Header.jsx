@@ -36,10 +36,21 @@ export function Header() {
           <div className="flex items-center space-x-4">
             <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
             <nav className="flex space-x-4">
-              <Link to="/hermano/menu" className={linkClass(["hermano"])}>Hermanos</Link>
-              <Link to="/pago/menu" className={linkClass(["pago","papeleta"])}>Mayordomía</Link>
-              <Link to="/archivo" className={linkClass(["archivo", "inventario", "patrimonio"])}>Archivo</Link>
-              <Link to="/documento/menu" className={linkClass(["documento", "etiqueta"])}>Documentos</Link>
+              {
+                rol != 'SE' ?
+                  <Link to="/pago/menu" className={linkClass(["pago", "papeleta"])}>Mayordomía</Link>
+                  :
+                  <></>
+              }
+              {
+                rol != 'MA' ?
+                  <>
+                    <Link to="/hermano/menu" className={linkClass(["hermano"])}>Hermanos</Link>
+                    <Link to="/archivo" className={linkClass(["archivo", "inventario", "patrimonio"])}>Archivo</Link>
+                    <Link to="/documento/menu" className={linkClass(["documento", "etiqueta"])}>Documentos</Link>
+                  </>
+                  : <></>
+              }
               <Link to="/eventos" className={linkClass(["evento"])}>Eventos</Link>
               {rol == 'GS' ?
                 <Link to="/users" className={linkClass(["user"])}>Usuarios</Link>
