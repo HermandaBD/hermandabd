@@ -22,7 +22,9 @@ export function Header() {
   };
 
   const linkClass = (path) => {
-    return location.pathname === path
+    let search = location.pathname;
+    let isLink = path.some(element => search.includes(element));
+    return isLink
       ? "font-bold text-white"
       : "font-normal text-white hover:text-gray-300";
   };
@@ -34,14 +36,13 @@ export function Header() {
           <div className="flex items-center space-x-4">
             <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
             <nav className="flex space-x-4">
-              <Link to="/hermanos" className={linkClass("/hermanos")}>Hermanos</Link>
-              <Link to="/pagos" className={linkClass("/pagos")}>Mayordomía</Link>
-              <Link to="/inventarios" className={linkClass("/inventarios")}>Archivo</Link>
-              <Link to="/patrimonios" className={linkClass("/patrimonios")}>Patrimonio</Link>
-              <Link to="/documentos" className={linkClass("/documentos")}>Documentos</Link>
-              <Link to="/eventos" className={linkClass("/eventos")}>Eventos</Link>
+              <Link to="/hermano/menu" className={linkClass(["hermano"])}>Hermanos</Link>
+              <Link to="/pago/menu" className={linkClass(["pago"])}>Mayordomía</Link>
+              <Link to="/archivo" className={linkClass(["archivo", "inventario", "patrimonio"])}>Archivo</Link>
+              <Link to="/documento/menu" className={linkClass(["documento", "etiqueta"])}>Documentos</Link>
+              <Link to="/eventos" className={linkClass(["evento"])}>Eventos</Link>
               {rol == 'GS' ?
-                <Link to="/users" className={linkClass("/users")}>Usuarios</Link>
+                <Link to="/users" className={linkClass(["user"])}>Usuarios</Link>
                 : <></>
               }
             </nav>

@@ -2,7 +2,12 @@ import React from 'react';
 import { Box, Typography, Avatar, Container } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-export function Perfil({ me }) {
+export function Perfil({ me, hermandad }) {
+  const rol = {
+    "SE": "Secretario",
+    "MA": "Mayordomo",
+    "GS": "Gestor"
+  }
   return (
     <Container>
       <Box
@@ -10,7 +15,7 @@ export function Perfil({ me }) {
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        minHeight="100vh"
+        minHeight="80vh"
         p={4}
         bgcolor="#f9f9f9"
         borderRadius={2}
@@ -32,8 +37,20 @@ export function Perfil({ me }) {
           <Typography variant="h6" color="textSecondary">
             Email
           </Typography>
-          <Typography variant="body1" color="textPrimary">
+          <Typography variant="body1" color="textPrimary" mb={2}>
             {me.email}
+          </Typography>
+          <Typography variant='h6' color="textSecondary">
+            Hermandad
+          </Typography>
+          <Typography variant="body1" color="textPrimary">
+            {hermandad ? hermandad.nombre : "No tienes hermandad asignada"}
+          </Typography>
+          <Typography variant='h6' color="textSecondary">
+            Rol
+          </Typography>
+          <Typography variant="body1" color="textPrimary">
+            {hermandad ? rol[me.rol] : "No tienes hermandad asignada"}
           </Typography>
         </Box>
       </Box>
