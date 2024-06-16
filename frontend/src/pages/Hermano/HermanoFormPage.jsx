@@ -71,6 +71,7 @@ export function HermanoFormPage() {
                 setValue('email', data.email)
                 setValue('fecha_nacimiento', data.fecha_nacimiento)
                 setValue('fecha_alta', data.fecha_alta)
+                setValue('fecha_baja', data.fecha_baja)
                 setValue('tutor_legal', data.tutor_legal)
                 setValue('direccion', data.direccion)
                 setValue('localidad', data.localidad)
@@ -142,6 +143,12 @@ export function HermanoFormPage() {
                         <input type="date" name="fecha_alta" id="fecha_alta" className="border-2 border-black p-3 rounded-lg block w-full my-3" value={hoy}
                             {...register('fecha_alta', { required: "Este campo es necesario" })} />
                         {errors.fecha_alta && <span className="text-red-500">{errors.fecha_alta.message} <br /></span>}
+                    </div>
+                    <div className="col-start-3 col-span-1">
+                        <label htmlFor="fecha_baja">Fecha de Baja</label>
+                        <input type="date" name="fecha_baja" id="fecha_baja" className="border-2 border-black p-3 rounded-lg block w-full my-3" 
+                            {...register('fecha_baja')} />
+                        {errors.fecha_baja && <span className="text-red-500">{errors.fecha_baja.message} <br /></span>}
                     </div>
                     <div className="col-start-4 col-span-2">
                         <label htmlFor="tutor_legal">Tutor legal</label>
@@ -224,6 +231,7 @@ export function HermanoFormPage() {
                 <h2 className="text-xl font-bold mb-4">Información de ayuda</h2>
                 <p> Formulario de creación de nuevo hermano. <br />
                     El número de hermano se aplicará automáticamente al siguiente número libre.<br />
+                    Para <strong>dar de baja</strong> a un hermano aplica una fecha de baja y guarda los cambios, el número de hermano se aplicará solo a los siguientes hermanos. <br />
                     Los asteriscos (<span className="text-red-500">*</span>) indican campos obligatorios.
                 </p>
             </div>
