@@ -7,7 +7,7 @@ import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { Modal } from "../../components/Modal";
 import { Cargando } from "../../components/Cargando";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 export function HermanosPage() {
     const [hermanos, setHermanos] = useState([]);
@@ -136,6 +136,9 @@ export function HermanosPage() {
 
                 <button className='bg-persian my-5 text-white' onClick={() => exportar()}>
                     <FontAwesomeIcon icon={faDownload} className="text-xl mr-1" />Exportar hermanos
+                </button>
+                <button className='bg-persian my-5 text-white' onClick={() => navigate('/import')}>
+                    <FontAwesomeIcon icon={faUpload} className="text-xl mr-1" />Importar hermanos
                 </button>
                 <button
                     onClick={() => setShowInactive(!showInactive)}

@@ -28,11 +28,17 @@ const CSVUpload = ({ model }) => {
     };
 
     return (
-        <div className="max-w-md mx-auto my-8 p-4 bg-white shadow-md rounded-md">
-            <h2 className="text-xl font-semibold mb-4">Subir CSV para {model}</h2>
-            <form onSubmit={handleSubmit} className="flex items-center space-x-4">
-                <input type="file" accept=".csv" onChange={handleFileChange} className="py-2 px-4 border border-gray-300 rounded-md" />
-                <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md">Subir</button>
+        <div className="my-1 p-4 block rounded-md ">
+            <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-12 gap-4">
+                    <div className="col-start-1 col-span-5">
+                        <label htmlFor="file">Archivo a importar <span className='text-red-500'>*</span></label>
+                        <input type="file" id='file' accept=".csv" onChange={handleFileChange} className="py-2 my-1 px-4 border border-gray-300 rounded-md" />
+                    </div>
+                    <div className="col-start-1 col-span-3">
+                        <button type="submit" className="bg-burdeos text-white py-2 px-4 rounded-md">Subir</button>
+                    </div>
+                </div>
             </form>
             {message && <p className="mt-4 text-green-500">{message}</p>}
         </div>

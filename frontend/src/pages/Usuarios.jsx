@@ -10,7 +10,7 @@ export function Usuarios() {
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState({});
     const { rol } = useContext(AuthContext);
-
+    const [userLogin, setUserLogin] = useState('')
     useEffect(() => {
         async function getUsuarios() {
             const response = await getUsers();
@@ -20,6 +20,10 @@ export function Usuarios() {
                 return acc;
             }, {});
             setRoles(initialRoles);
+            let usersLogin = localStorage.getItem('user');
+            const jsonObject = JSON.parse(usersLogin);
+            const valuesArray = Object.values(jsonObject);
+            setUserLogin(valuesArray[1]);
         }
         getUsuarios();
     }, []);
@@ -47,7 +51,7 @@ export function Usuarios() {
         }
     };
 
-    const handleDeleteAccess = async (username) =>{
+    const handleDeleteAccess = async (username) => {
         try {
             const user = await getUser(username);
             const data = user.data;
@@ -59,14 +63,14 @@ export function Usuarios() {
             } else {
                 toast.error("No se puedo eliminar el acceso");
             }
-        }catch (error) {
+        } catch (error) {
             console.error('Error al eliminar el acceso al usuario: ', error);
         }
     }
 
     if (rol === 'GS') { // Si es gestor que pueda ver todos los usuarios de su hermandad y editar roles
         return (
-            <div className="mx-auto mt-10 max-w-96">
+            <div className="mx-auto mt-10 max-w-lg">
                 {users.map(user => (
                     <div key={user.id} className="bg-white shadow-md rounded-lg p-4 mb-4 outline-gray-700 outline">
                         <p className="text-lg text-black font-semibold">{user.first_name} {user.last_name}</p>
@@ -85,13 +89,14 @@ export function Usuarios() {
                                 <MenuItem value="MA">Mayordomo</MenuItem>
                             </Select>
                         </FormControl>
-                        <div>
+                        <div className='grid grid-cols-6 gap-4 p-2'>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 startIcon={<SaveIcon />}
                                 onClick={() => handleSubmit(user.username)}
-                                className="mt-2"
+                                className="mt-2 col-start-1 col-span-3"
+                                disabled={user.email === userLogin}
                             >
                                 Actualizar Rol
                             </Button>
@@ -100,7 +105,8 @@ export function Usuarios() {
                                 color="warning"
                                 startIcon={<Warning />}
                                 onClick={() => handleDeleteAccess(user.username)}
-                                className="mt-2"
+                                className="mt-2 col-start-4 col-span-3"
+                                disabled={user.email === userLogin}
                             >
                                 Eliminar acceso
                             </Button>
