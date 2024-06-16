@@ -42,6 +42,7 @@ import { MenuInventarioPage } from './pages/Inventario/MenuInventarioPage.jsx';
 import { MenuDocumentoPage } from './pages/Documento/MenuDocumentoPage.jsx';
 import { MenuMayordomiaPage } from './pages/Pago/MenuMayordomiaPage.jsx';
 import { ExportarBD } from './pages/BD/ExportarBD.jsx';
+import { SupHeader } from './components/SupHeader.jsx';
 
 
 
@@ -62,6 +63,7 @@ function App() {
             pauseOnHover
             theme="light"
             transition:Bounce />
+          <SupHeader/>
           <Header />
           <main className='flex-grow'>
             <Routes>
