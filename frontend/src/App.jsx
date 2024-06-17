@@ -43,6 +43,8 @@ import { MenuDocumentoPage } from './pages/Documento/MenuDocumentoPage.jsx';
 import { MenuMayordomiaPage } from './pages/Pago/MenuMayordomiaPage.jsx';
 import { ExportarBD } from './pages/BD/ExportarBD.jsx';
 import { SupHeader } from './components/SupHeader.jsx';
+import { MenuAdminPage } from './pages/Administracion/MenuAdminPage.jsx';
+import { EstadisticasPage } from './pages/Administracion/EstadisticasPage.jsx';
 
 
 
@@ -74,6 +76,8 @@ function App() {
               <Route path='/login' element={<LoginPage />} />
               <Route path='/activate/:uid/:token' element={<ActivateAccountPage />} />
               <Route path='/usuarioHermandad' element={<AdminRoute element={UsuarioHermandadFormPage} />}/>
+              <Route path='/admin' element={<AdminRoute element={MenuAdminPage} />}/>
+              <Route path='/estadisticas' element={<AdminRoute element={EstadisticasPage} />}/>
               <Route path='/me' element={<PrivateRoute element={MePage} />} />
               <Route path='/hermandad' element={<PrivateRoute element={HermandadFormPage} />} />
               <Route path='/hermandades' element={<AdminRoute element={HermandadPage} />} />
