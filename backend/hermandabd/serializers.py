@@ -232,9 +232,19 @@ class PapeletaSitioSerializer(serializers.ModelSerializer):
 
 
 class CartaSerializer(serializers.ModelSerializer):
+    """ destinatarios = HermanoSerializer(many=True) """
+
     class Meta:
         model = Carta
-        fields = "__all__"
+        fields = ["id", "asunto", "cuerpo", "fecha_envio", "hermandad", "destinatarios"]
+
+    """ def create(self, validated_data):
+        destinatarios_data = validated_data.pop("destinatarios")
+        carta = Carta.objects.create(**validated_data)
+        for hermano_data in destinatarios_data:
+            hermano = Hermano.objects.get(id=hermano_data["id"])
+            carta.destinatarios.add(hermano)
+        return carta """
 
     def validate_hermandad(self, value):
         user = self.context["request"].user

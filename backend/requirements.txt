@@ -29,6 +29,7 @@ social-auth-core==4.5.2
 sqlparse==0.5.0
 tzdata==2023.4
 urllib3==2.1.0
+python-decouple==3.8
 reportlab==4.2.0
 PyPDF2==3.0.1
 pytest==8.2.2

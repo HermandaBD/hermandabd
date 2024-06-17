@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { createCarta, deleteCarta, updateCarta, getCarta } from "../../api/carta.api.js";
 import { useEffect, useState } from "react";
-import { getHermandades } from "../../api/hermandad.api.js";
+import { getHermandad, getHermandades } from "../../api/hermandad.api.js";
 import { getHermanos } from "../../api/hermano.api.js";
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { Modal } from "../../components/Modal";
@@ -14,6 +14,8 @@ export function CartaFormPage() {
     const navigate = useNavigate();
     const params = useParams(); //RUD
     const [hermanos, setHermanos] = useState([]);  // Cambiar destinatarioss a hermanos
+    const [emailHermandad, setEmailHermandad] = useState([]);  // Cambiar destinatarioss a hermanos
+    const [fecha, setFecha] = useState('')
     const [selectedHermanos, setSelectedHermanos] = useState([]);
     const hermandad = localStorage.getItem('hermandad_usuario');
     const [showModal, setShowModal] = useState(false);
@@ -22,6 +24,11 @@ export function CartaFormPage() {
         async function fetchData() {
             try {
                 const hermanosResponse = await getHermanos();
+
+                const hermandadResponse = await getHermandad(hermandad);
+                setEmailHermandad(hermandadResponse.data.email);
+
+                
                 const hermanosData = hermanosResponse.data.map(hermano => ({
                     value: hermano.id,
                     label: hermano.nombre
@@ -31,7 +38,6 @@ export function CartaFormPage() {
                 console.error("Error fetching data:", error);
             }
         }
-
         fetchData();
     }, []);
 
@@ -40,6 +46,9 @@ export function CartaFormPage() {
     };
 
     const onSubmit = handleSubmit(async data => {
+        let currentDate = new Date().toJSON().slice(0, 10);
+        setFecha(currentDate);
+        data.fecha_envio = currentDate;
         data.destinatarios = selectedHermanos.map(option => option.value);
         try {
             let response;
@@ -116,7 +125,6 @@ export function CartaFormPage() {
                             {errors.fecha_envio && <span className="text-red-500">{errors.fecha_envio.message} <br /></span>}
                         </div>
                     </div>
-
                     <label htmlFor="cuerpo">Cuerpo<span className="text-red-500">*</span></label>
                     <textarea
                         name="cuerpo"
@@ -128,6 +136,8 @@ export function CartaFormPage() {
                     {errors.cuerpo && <span className="text-red-500">{errors.cuerpo.message} <br /></span>}
 
                     <input type="hidden" id="hermandad" name="hermandad" value={hermandad} {...register('hermandad')} />
+                     <input type="hidden" id="reply_to" name="reply_to" value={emailHermandad}
+                    {...register('reply_to')} />
 
                     <label htmlFor="destinatarios">Destinatarios<span className="text-red-500">*</span></label>
                     <button type="button" onClick={selectAllHermanos} className="p-1 text-white bg-sandy mx-2">Todos</button>
