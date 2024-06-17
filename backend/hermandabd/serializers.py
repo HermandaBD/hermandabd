@@ -127,6 +127,20 @@ class EventoSerializer(serializers.ModelSerializer):
                 "No tiene permiso para agregar un envento a esta hermandad."
             )
         return value
+    
+"""     def validate_fechas(self, data):
+        
+        Verifica que fecha_fin no sea anterior a fecha_inicio.
+        
+        fecha_inicio = data.start
+        fecha_fin = data.end
+
+        if fecha_fin < fecha_inicio:
+            raise serializers.ValidationError(
+                "La fecha de fin no puede ser anterior a la fecha de inicio."
+            )
+
+        return data """
 
 
 class EtiquetaSerializer(serializers.ModelSerializer):
