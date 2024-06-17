@@ -1,11 +1,9 @@
 from django.test import TestCase
-from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APIClient, APIRequestFactory, force_authenticate, APITestCase
-from .models import Hermandad, Hermano, User, Evento, Etiqueta, Documento, Patrimonio, Inventario, Carta
-from .serializers import HermandadSerializer, HermanoSerializer, EventoSerializer, EtiquetaSerializer, DocumentoSerializer, PatrimonioSerializer, InventarioSerializer, CartaSerializer
-from .views import InventarioViewSet
+from .models import Hermandad, Hermano, User, Evento, Etiqueta, Documento, Patrimonio, Inventario, Carta, Pago, PapeletaSitio
+from .serializers import HermandadSerializer, HermanoSerializer, EventoSerializer, EtiquetaSerializer, DocumentoSerializer, PatrimonioSerializer, InventarioSerializer, CartaSerializer, PagoSerializer, PapeletaSitioSerializer
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 import datetime
@@ -1510,3 +1508,461 @@ class CartaViewSetTest(APITestCase):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Carta.objects.count(), 1)
+
+#TEST DE PAGO
+
+class PagoModelTest(TestCase):
+    def setUp(self):
+        self.hermandad = Hermandad.objects.create(
+            nombre="Hermandad Test",
+            descripcion="Descripción Test",
+            poblacion="Población Test",
+            cif="12345678A",
+            email="test@hermandad.com",
+            telefono="123456789",
+        )
+        self.hermano = Hermano.objects.create(
+            nombre="Juan",
+            apellidos="Pérez",
+            dni="12345678Z",
+            codigo_postal=28001,
+            direccion="Calle Mayor, 1",
+            email="juan@example.com",
+            fecha_nacimiento=datetime.date(1990, 1, 1),
+            fecha_alta=datetime.date.today(),
+            forma_pago="Transferencia",
+            hermandad=self.hermandad,
+            iban="ES9121000418450200051332",
+            localidad="Madrid",
+            numero_hermano=1,
+            provincia="Madrid",
+            telefono="123456789",
+            titular_cuenta_bancaria="Juan Pérez",
+        )
+        self.pago = Pago.objects.create(
+            nombre="Pago Test",
+            descripcion="Descripción del pago test",
+            fecha=datetime.date(2024, 6, 1),
+            valor=100.00,
+            hermandad=self.hermandad,
+        )
+        self.pago.hermano.add(self.hermano)
+
+    def test_pago_creation(self):
+        self.assertEqual(self.pago.nombre, "Pago Test")
+        self.assertEqual(self.pago.descripcion, "Descripción del pago test")
+        self.assertEqual(self.pago.fecha, datetime.date(2024, 6, 1))
+        self.assertEqual(self.pago.valor, 100.00)
+        self.assertEqual(self.pago.hermandad, self.hermandad)
+        self.assertIn(self.hermano, self.pago.hermano.all())
+
+    def test_pago_str(self):
+        self.assertEqual(str(self.pago), "Pago Test")
+
+
+class PagoSerializerTest(APITestCase):
+    def setUp(self):
+        self.hermandad = Hermandad.objects.create(
+            nombre="Hermandad Test",
+            descripcion="Descripción Test",
+            poblacion="Población Test",
+            cif="12345678A",
+            email="test@hermandad.com",
+            telefono="123456789",
+        )
+        self.hermano = Hermano.objects.create(
+            nombre="Juan",
+            apellidos="Pérez",
+            dni="12345678Z",
+            codigo_postal=28001,
+            direccion="Calle Mayor, 1",
+            email="juan@example.com",
+            fecha_nacimiento=datetime.date(1990, 1, 1),
+            fecha_alta=datetime.date.today(),
+            forma_pago="Transferencia",
+            hermandad=self.hermandad,
+            iban="ES9121000418450200051332",
+            localidad="Madrid",
+            numero_hermano=1,
+            provincia="Madrid",
+            telefono="123456789",
+            titular_cuenta_bancaria="Juan Pérez",
+        )
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="password",
+            rol=User.GESTOR,
+            hermandad=self.hermandad,
+        )
+
+    def test_valid_serializer_data(self):
+        data = {
+            "nombre": "Pago de Prueba",
+            "descripcion": "Descripción de prueba",
+            "fecha": "2024-06-01",
+            "valor": 150.00,
+            "hermandad": self.hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+
+        factory = APIRequestFactory()
+        request = factory.post("/api/v1/pagos/", data, format="json")
+        request.user = self.user
+
+        serializer = PagoSerializer(data=data, context={"request": request})
+        is_valid = serializer.is_valid()
+        self.assertTrue(is_valid)
+
+class PagoViewSetTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.hermandad = Hermandad.objects.create(
+            nombre="Hermandad Test",
+            descripcion="Descripción Test",
+            poblacion="Población Test",
+            cif="12345678A",
+            email="test@hermandad.com",
+            telefono="123456789",
+        )
+        self.hermano = Hermano.objects.create(
+            nombre="Juan",
+            apellidos="Pérez",
+            dni="12345678Z",
+            codigo_postal=28001,
+            direccion="Calle Mayor, 1",
+            email="juan@example.com",
+            fecha_nacimiento=datetime.date(1990, 1, 1),
+            fecha_alta=datetime.date.today(),
+            forma_pago="Transferencia",
+            hermandad=self.hermandad,
+            iban="ES9121000418450200051332",
+            localidad="Madrid",
+            numero_hermano=1,
+            provincia="Madrid",
+            telefono="123456789",
+            titular_cuenta_bancaria="Juan Pérez",
+        )
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="password",
+            rol=User.GESTOR,
+            hermandad=self.hermandad,
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.pago = Pago.objects.create(
+            nombre="Pago Test",
+            descripcion="Descripción del pago test",
+            fecha="2024-06-01",
+            valor=100.00,
+            hermandad=self.hermandad,
+        )
+        self.pago.hermano.add(self.hermano)
+
+    def test_get_pago_list(self):
+        url = "/api/v1/pagos/"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_create_pago(self):
+        data = {
+            "nombre": "Nuevo Pago",
+            "descripcion": "Descripción de nuevo pago",
+            "fecha": "2024-06-01",
+            "valor": 150.00,
+            "hermandad": self.hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+        url = "/api/v1/pagos/"
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Pago.objects.count(), 2)
+
+    def test_update_pago(self):
+        data = {
+            "nombre": "Pago Modificado",
+            "descripcion": "Descripción modificada",
+            "fecha": "2024-06-01",
+            "valor": 200.00,
+            "hermandad": self.hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+        url = f"/api/v1/pagos/{self.pago.id}/"
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.pago.refresh_from_db()
+        self.assertEqual(self.pago.nombre, "Pago Modificado")
+        self.assertEqual(self.pago.descripcion, "Descripción modificada")
+        self.assertEqual(self.pago.valor, 200.00)
+
+    def test_delete_pago(self):
+        url = f"/api/v1/pagos/{self.pago.id}/"
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Pago.objects.count(), 0)
+
+    def test_invalid_hermandad_permission(self):
+        otra_hermandad = Hermandad.objects.create(
+            nombre="Otra Hermandad",
+            descripcion="Descripción de otra hermandad",
+            poblacion="Población de otra hermandad",
+            cif="87654321B",
+            email="otra@hermandad.com",
+            telefono="987654321",
+        )
+        data = {
+            "nombre": "Pago Otra Hermandad",
+            "descripcion": "Descripción de otra hermandad",
+            "fecha": "2024-06-01",
+            "valor": 250.00,
+            "hermandad": otra_hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+        url = "/api/v1/pagos/"
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Pago.objects.count(), 1)
+
+#TEST DE PAPELETA
+
+
+class PapeletaSitioModelTest(TestCase):
+    def setUp(self):
+        self.hermandad = Hermandad.objects.create(
+            nombre="Hermandad Test",
+            descripcion="Descripción Test",
+            poblacion="Población Test",
+            cif="12345678A",
+            email="test@hermandad.com",
+            telefono="123456789",
+        )
+
+        self.hermano = Hermano.objects.create(
+            nombre="Juan",
+            apellidos="Pérez",
+            dni="12345678Z",
+            codigo_postal=28001,
+            direccion="Calle Mayor, 1",
+            email="juan@example.com",
+            fecha_nacimiento=datetime.date(1990, 1, 1),
+            fecha_alta=datetime.date.today(),
+            forma_pago="Transferencia",
+            hermandad=self.hermandad,
+            iban="ES9121000418450200051332",
+            localidad="Madrid",
+            numero_hermano=1,
+            provincia="Madrid",
+            telefono="123456789",
+            titular_cuenta_bancaria="Juan Pérez",
+        )
+
+        self.papeleta = PapeletaSitio.objects.create(
+            nombre_evento="Evento Test",
+            ubicacion="Ubicación Test",
+            puesto="Puesto Test",
+            valor=100.00,
+            fecha=datetime.date(2024, 6, 1),
+            hora=datetime.time(18, 0),
+            hermandad=self.hermandad,
+        )
+        self.papeleta.hermano.add(self.hermano)
+
+    def test_papeleta_creation(self):
+        self.assertEqual(self.papeleta.nombre_evento, "Evento Test")
+        self.assertEqual(self.papeleta.ubicacion, "Ubicación Test")
+        self.assertEqual(self.papeleta.puesto, "Puesto Test")
+        self.assertEqual(self.papeleta.valor, 100.00)
+        self.assertEqual(self.papeleta.fecha, datetime.date(2024, 6, 1))
+        self.assertEqual(self.papeleta.hora, datetime.time(18, 0))
+        self.assertEqual(self.papeleta.hermandad, self.hermandad)
+        self.assertIn(self.hermano, self.papeleta.hermano.all())
+
+    def test_papeleta_str(self):
+        self.assertEqual(str(self.papeleta), "Evento Test")
+
+
+class PapeletaSitioSerializerTest(TestCase):
+    def setUp(self):
+        self.hermandad = Hermandad.objects.create(
+            nombre="Hermandad Test",
+            descripcion="Descripción Test",
+            poblacion="Población Test",
+            cif="12345678A",
+            email="test@hermandad.com",
+            telefono="123456789",
+        )
+
+        self.hermano = Hermano.objects.create(
+            nombre="Juan",
+            apellidos="Pérez",
+            dni="12345678Z",
+            codigo_postal=28001,
+            direccion="Calle Mayor, 1",
+            email="juan@example.com",
+            fecha_nacimiento=datetime.date(1990, 1, 1),
+            fecha_alta=datetime.date.today(),
+            forma_pago="Transferencia",
+            hermandad=self.hermandad,
+            iban="ES9121000418450200051332",
+            localidad="Madrid",
+            numero_hermano=1,
+            provincia="Madrid",
+            telefono="123456789",
+            titular_cuenta_bancaria="Juan Pérez",
+        )
+
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="password",
+            rol=User.GESTOR,
+            hermandad=self.hermandad,
+        )
+
+    def test_valid_serializer_data(self):
+        data = {
+            "nombre_evento": "Evento Test",
+            "ubicacion": "Ubicación Test",
+            "puesto": "Puesto Test",
+            "valor": 100.00,
+            "fecha": "2024-06-01",
+            "hora": "18:00:00",
+            "hermandad": self.hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+
+        factory = APIRequestFactory()
+        request = factory.post("/api/v1/papeletasitios/", data, format="json")
+        request.user = self.user
+
+        serializer = PapeletaSitioSerializer(data=data, context={"request": request})
+        is_valid = serializer.is_valid()
+        self.assertTrue(is_valid)
+
+class PapeletaSitioViewSetTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.hermandad = Hermandad.objects.create(
+            nombre="Hermandad Test",
+            descripcion="Descripción Test",
+            poblacion="Población Test",
+            cif="12345678A",
+            email="test@hermandad.com",
+            telefono="123456789",
+        )
+
+        self.hermano = Hermano.objects.create(
+            nombre="Juan",
+            apellidos="Pérez",
+            dni="12345678Z",
+            codigo_postal=28001,
+            direccion="Calle Mayor, 1",
+            email="juan@example.com",
+            fecha_nacimiento=datetime.date(1990, 1, 1),
+            fecha_alta=datetime.date.today(),
+            forma_pago="Transferencia",
+            hermandad=self.hermandad,
+            iban="ES9121000418450200051332",
+            localidad="Madrid",
+            numero_hermano=1,
+            provincia="Madrid",
+            telefono="123456789",
+            titular_cuenta_bancaria="Juan Pérez",
+        )
+
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="password",
+            rol=User.GESTOR,
+            hermandad=self.hermandad,
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.papeleta = PapeletaSitio.objects.create(
+            nombre_evento="Evento Test",
+            ubicacion="Ubicación Test",
+            puesto="Puesto Test",
+            valor=100.00,
+            fecha="2024-06-01",
+            hora="18:00:00",
+            hermandad=self.hermandad,
+        )
+        self.papeleta.hermano.add(self.hermano)
+
+    def test_get_papeleta_list(self):
+        url = "/api/v1/papeletasitios/"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_create_papeleta(self):
+        data = {
+            "nombre_evento": "Nuevo Evento",
+            "ubicacion": "Nueva Ubicación",
+            "puesto": "Nuevo Puesto",
+            "valor": 150.00,
+            "fecha": "2024-07-01",
+            "hora": "19:00:00",
+            "hermandad": self.hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+        url = "/api/v1/papeletasitios/"
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(PapeletaSitio.objects.count(), 2)
+
+    def test_update_papeleta(self):
+        data = {
+            "nombre_evento": "Evento Modificado",
+            "ubicacion": "Ubicación Modificada",
+            "puesto": "Puesto Modificado",
+            "valor": 200.00,
+            "fecha": "2024-08-01",
+            "hora": "20:00:00",
+            "hermandad": self.hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+        url = f"/api/v1/papeletasitios/{self.papeleta.id}/"
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.papeleta.refresh_from_db()
+        self.assertEqual(self.papeleta.nombre_evento, "Evento Modificado")
+        self.assertEqual(self.papeleta.ubicacion, "Ubicación Modificada")
+        self.assertEqual(self.papeleta.puesto, "Puesto Modificado")
+        self.assertEqual(self.papeleta.valor, 200.00)
+
+    def test_delete_papeleta(self):
+        url = f"/api/v1/papeletasitios/{self.papeleta.id}/"
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(PapeletaSitio.objects.count(), 0)
+
+    def test_invalid_hermandad_permission(self):
+        otra_hermandad = Hermandad.objects.create(
+            nombre="Otra Hermandad",
+            descripcion="Descripción de otra hermandad",
+            poblacion="Población de otra hermandad",
+            cif="87654321B",
+            email="otra@hermandad.com",
+            telefono="987654321",
+        )
+        data = {
+            "nombre_evento": "Evento Otra Hermandad",
+            "ubicacion": "Ubicación de otra hermandad",
+            "puesto": "Puesto de otra hermandad",
+            "valor": 250.00,
+            "fecha": "2024-09-01",
+            "hora": "21:00:00",
+            "hermandad": otra_hermandad.id,
+            "hermano": [self.hermano.id],
+        }
+        url = "/api/v1/papeletasitios/"
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(PapeletaSitio.objects.count(), 1)
