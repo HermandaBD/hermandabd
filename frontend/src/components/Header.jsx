@@ -9,7 +9,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logoutAction, isAuthenticated, hermandadUsuario, rol } = useContext(AuthContext);
+  const { logoutAction, isAuthenticated, hermandadUsuario, rol, isSuperuser } = useContext(AuthContext);
 
   const onLogout = () => {
     logout();
@@ -30,7 +30,7 @@ export function Header() {
   };
 
   return (
-    <header className={isAuthenticated ? "bg-burdeos flex items-center justify-between p-4 font-roboto": "bg-white flex items-center justify-between p-4 font-roboto"}>
+    <header className={isAuthenticated ? "bg-burdeos flex items-center justify-between p-4 font-roboto" : "bg-white flex items-center justify-between p-4 font-roboto"}>
       {isAuthenticated ? (hermandadUsuario != "null" ?
         (<>
           <div className="flex items-center space-x-4">
@@ -55,6 +55,12 @@ export function Header() {
               {rol == 'GS' ?
                 <Link to="/users" className={linkClass(["user"])}>Usuarios</Link>
                 : <></>
+              }
+              {
+                isSuperuser ?
+                  <Link to="/admin" className={linkClass(["admin"])}>Administración</Link>
+                  :
+                  <></>
               }
             </nav>
           </div>
@@ -90,6 +96,14 @@ export function Header() {
           <>
             <div className="flex items-center space-x-4">
               <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
+              <nav className='flex space-x-40'>
+                {
+                  isSuperuser ?
+                    <Link to="/admin" className={linkClass(["admin"])}>Administración</Link>
+                    :
+                    <></>
+                }
+              </nav>
             </div>
             <Menu as="div" className="relative inline-block text-left">
               <MenuButton className="flex items-center bg-white text-black hover:text-gray-600 rounded-full px-4 py-2 shadow">

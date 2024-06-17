@@ -32,7 +32,7 @@ function MainContent() {
           <button onClick={()=>setShowModal(true)} className='bg-burdeos text-2xl text-white block mx-auto mt-3'>Contáctacnos</button>
         </div>
       </div>
-      <div className='xl:grid grid-cols-3 gap-4'>
+      <div className='xl:grid grid-cols-3 gap-4 mb-5'>
         <div className='col-span-1'>
           <FeatureCard title="Único" />
         </div>

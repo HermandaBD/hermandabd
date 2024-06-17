@@ -47,3 +47,7 @@ export const importBD = async (model,formData) => {
         console.error(error);
     }
 }
+
+export const getEstadisticas = async () => {
+    return await bdAPI.get('/statistics');
+}
