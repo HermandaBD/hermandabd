@@ -4,7 +4,7 @@ import { NoAdmin } from '../pages/NoAdmin';
 
 export const AdminRoute = ({ element: Element }) => {
   const authToken = localStorage.getItem('auth_token');
-  const staff = (localStorage.getItem('staff')=== 'true');
+  const superuser = (localStorage.getItem('superuser')=== 'true');
   
-  return authToken ? (staff?<Element />:<NoAdmin/>) : <Navigate to="/login" />;
+  return authToken ? (superuser?<Element />:<NoAdmin/>) : <Navigate to="/login" />;
 };

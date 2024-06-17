@@ -7,6 +7,7 @@ import { getHermanos } from "../../api/hermano.api.js";
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { Modal } from "../../components/Modal";
 import { toast } from "react-toastify";
+import Select from 'react-select';
 
 export function CartaFormPage() {
     const { register, handleSubmit, formState: { errors }, setValue, setError } = useForm();
@@ -15,18 +16,24 @@ export function CartaFormPage() {
     const [hermanos, setHermanos] = useState([]);  // Cambiar destinatarioss a hermanos
     const [emailHermandad, setEmailHermandad] = useState([]);  // Cambiar destinatarioss a hermanos
     const [fecha, setFecha] = useState('')
+    const [selectedHermanos, setSelectedHermanos] = useState([]);
     const hermandad = localStorage.getItem('hermandad_usuario');
     const [showModal, setShowModal] = useState(false);
+
     useEffect(() => {
         async function fetchData() {
             try {
                 const hermanosResponse = await getHermanos();
-                setHermanos(hermanosResponse.data);
 
                 const hermandadResponse = await getHermandad(hermandad);
                 setEmailHermandad(hermandadResponse.data.email);
 
                 
+                const hermanosData = hermanosResponse.data.map(hermano => ({
+                    value: hermano.id,
+                    label: hermano.nombre
+                }));
+                setHermanos(hermanosData);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -34,10 +41,15 @@ export function CartaFormPage() {
         fetchData();
     }, []);
 
+    const handleSelectChange = selectedOptions => {
+        setSelectedHermanos(selectedOptions);
+    };
+
     const onSubmit = handleSubmit(async data => {
         let currentDate = new Date().toJSON().slice(0, 10);
         setFecha(currentDate);
         data.fecha_envio = currentDate;
+        data.destinatarios = selectedHermanos.map(option => option.value);
         try {
             let response;
             if (params.id) {
@@ -64,16 +76,21 @@ export function CartaFormPage() {
         async function cargarCarta() {
             if (params.id) {
                 const { data } = await getCarta(params.id)
+                const destinatariosSeleccionados = hermanos.filter(hermano => data.destinatarios.includes(hermano.value));
 
                 setValue('asunto', data.asunto)
                 setValue('cuerpo', data.cuerpo)
                 setValue('fecha_envio', data.fecha_envio)
                 setValue('hermandad', data.hermandad)
-                setValue('destinatarios', data.destinatarios)
+                setSelectedHermanos(destinatariosSeleccionados);
             }
         }
         cargarCarta();
-    }, [])
+    }, [params.id, hermanos])
+
+    const selectAllHermanos = () => {
+        setSelectedHermanos(hermanos);
+    };
 
     return (
         <div className='max-w-5xl p-10 mx-auto my-5'>
@@ -92,7 +109,7 @@ export function CartaFormPage() {
                                 id="asunto"
                                 className="border-2 border-black p-3 rounded-lg block w-full my-3"
                                 placeholder="Asunto de la carta"
-                                {...register('asunto', { required: "Campo requerido", maxLength: {value:100, message: "Máximo 100 caracteres"} })}
+                                {...register('asunto', { required: "Campo requerido", maxLength: { value: 100, message: "Máximo 100 caracteres" } })}
                             />
                             {errors.asunto && <span className="text-red-500">{errors.asunto.message} <br /></span>}
                         </div>
@@ -114,7 +131,7 @@ export function CartaFormPage() {
                         id="cuerpo"
                         className="border-2 border-black p-3 rounded-lg block w-full my-3"
                         placeholder="Cuerpo de la carta"
-                        {...register('cuerpo', { required: "Campo requerido", maxLength: {value:1000, message: "Max 1000 caracteres"} })}
+                        {...register('cuerpo', { required: "Campo requerido", maxLength: { value: 1000, message: "Max 1000 caracteres" } })}
                     />
                     {errors.cuerpo && <span className="text-red-500">{errors.cuerpo.message} <br /></span>}
 
@@ -123,19 +140,16 @@ export function CartaFormPage() {
                     {...register('reply_to')} />
 
                     <label htmlFor="destinatarios">Destinatarios<span className="text-red-500">*</span></label>
-                    <select
-                        multiple
+                    <button type="button" onClick={selectAllHermanos} className="p-1 text-white bg-sandy mx-2">Todos</button>
+                    <Select
+                        isMulti
                         name="destinatarios"
-                        id="destinatarios"
-                        className="border-2 border-black p-3 rounded-lg block w-full my-3"
-                        {...register('destinatarios', { required: "Campo requerido" })}
-                    >
-                        {hermanos.map((hermano) => (  // Cambiar destinatarios a hermanos
-                            <option key={hermano.id} value={hermano.id}>
-                                {hermano.nombre}
-                            </option>
-                        ))}
-                    </select>
+                        options={hermanos}
+                        className="basic-multi-select border-2 border-black rounded-lg block w-full my-3"
+                        classNamePrefix="select"
+                        value={selectedHermanos}
+                        onChange={handleSelectChange}
+                    />
                     {errors.destinatarios && <span className="text-red-500">{errors.destinatarios.message} <br /> </span>}
 
                     <button className="bg-burdeos text-white font-bold p-3 rounded-lg block w-full mt-3">Guardar Carta</button>

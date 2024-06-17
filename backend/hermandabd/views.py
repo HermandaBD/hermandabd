@@ -5,14 +5,19 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .permissions import isRelatedToHermandad
 import csv
-from django.conf import settings
 from django.core.mail import send_mail, EmailMessage
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 from .forms import CSVUploadForm
 from .tasks import enviar_correo_task
+from reportlab.pdfgen import canvas
+import os
+from django.conf import settings
+from reportlab.lib.pagesizes import A4
+from io import BytesIO
+from PyPDF2 import PdfReader, PdfWriter
 from .models import (
     Hermandad,
     Hermano,
@@ -38,6 +43,112 @@ from .serializers import (
     PagoSerializer,
     CustomUserSerializer,
 )
+
+def generate_pdf(request, id):
+    pago = Pago.objects.filter(id=id)[0]
+    hermanos = pago.hermano.all()
+    forma_pago= ""
+    # Ruta del PDF original
+    if not pago.diseno:
+        original_pdf_path = "media/Cuota_ejemplo.pdf"
+    else:
+        original_pdf_path = pago.diseno    
+    width_mm = 296.6
+    height_mm = 134.3
+    width_points = width_mm * 72 / 25.4
+    height_points = height_mm * 72 / 25.4
+    custom_page_size = (width_points, height_points)
+    # Leer el PDF original
+    writer = PdfWriter()
+
+    for hermano in hermanos:
+        forma_pago = hermano.forma_pago
+        reader = PdfReader(original_pdf_path)
+        original_page = reader.pages[0]
+        packet = BytesIO()
+        can = canvas.Canvas(packet,pagesize=custom_page_size)
+        # Agregar contenido al canvas
+        year = datetime.now().year
+        can.drawString(110, 450, str(year))
+        can.drawString(82, 356.5, f"{hermano.nombre} {hermano.apellidos}")
+        can.drawString(65, 308, f" {hermano.dni}")
+        can.drawString(108, 261.5, f"{hermano.direccion} {hermano.localidad}")
+        can.drawString(155,217.8, f"{hermano.numero_hermano}")
+        can.drawString(740,160, f"{pago.valor}€")
+        can.save()
+
+        # Mover el contenido del canvas al inicio del BytesIO buffer
+        packet.seek(0)
+        new_pdf = PdfReader(packet).pages[0]
+
+        original_page.merge_page(new_pdf)
+
+        # Añadir una nueva página al writer basada en el original
+        """ for page_num in range(len(reader.pages)):
+            page = reader.pages[page_num] """
+        #writer.add_page(original_page)
+        writer.add_page(original_page)
+    # Guardar el archivo PDF en una ruta específica
+    output_path = f'media/cuota_{forma_pago}.pdf'
+    with open(output_path, 'wb') as output_file:
+        writer.write(output_file)
+
+    # Enviar el archivo PDF como respuesta
+    return FileResponse(open(output_path, 'rb'), content_type='application/pdf', filename=f'cuota_{forma_pago}.pdf')
+
+
+
+def generate_papeleta(request, id):
+    papeleta = PapeletaSitio.objects.filter(id=id)[0]
+    hermanos = papeleta.hermano.all()
+    puesto= ""
+    # Ruta del PDF original
+    if not papeleta.diseno:
+        original_pdf_path = "media/Papeleta_ejemplo.pdf"
+    else:
+        original_pdf_path = papeleta.diseno    
+    width_mm = 296.6
+    height_mm = 134.3
+    width_points = width_mm * 72 / 25.4
+    height_points = height_mm * 72 / 25.4
+    custom_page_size = (width_points, height_points)
+    # Leer el PDF original
+    writer = PdfWriter()
+
+    for hermano in hermanos:
+        reader = PdfReader(original_pdf_path)
+        original_page = reader.pages[0]
+        packet = BytesIO()
+        can = canvas.Canvas(packet,pagesize=custom_page_size)
+        # Agregar contenido al canvas
+        year = datetime.now().year
+        can.drawString(155, 450, str(year))
+        can.drawString(155, 356.5, f"{hermano.nombre} {hermano.apellidos}")
+        can.drawString(155, 308, f" {hermano.dni}")
+        can.drawString(155,251.8, f"{hermano.numero_hermano}")
+        can.drawString(155,200, f"{papeleta.ubicacion} {papeleta.fecha} {papeleta.hora}")
+        can.drawString(740,90, f"{papeleta.valor}")
+        can.save()
+
+        # Mover el contenido del canvas al inicio del BytesIO buffer
+        packet.seek(0)
+        new_pdf = PdfReader(packet).pages[0]
+
+        original_page.merge_page(new_pdf)
+
+        # Añadir una nueva página al writer basada en el original
+        """ for page_num in range(len(reader.pages)):
+            page = reader.pages[page_num] """
+        #writer.add_page(original_page)
+        writer.add_page(original_page)
+    # Guardar el archivo PDF en una ruta específica
+    output_path = f'media/papeleta_{papeleta.puesto}.pdf'
+    with open(output_path, 'wb') as output_file:
+        writer.write(output_file)
+
+    # Enviar el archivo PDF como respuesta
+    return FileResponse(open(output_path, 'rb'), content_type='application/pdf', filename=f'papeleta_{papeleta.puesto}.pdf')
+
 
 
 class CustomUserViewSet(UserViewSet):
@@ -344,3 +455,6 @@ class ImportDataView(APIView):
                 status=status.HTTP_201_CREATED,
             )
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    

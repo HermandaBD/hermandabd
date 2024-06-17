@@ -10,8 +10,11 @@ export function MePage() {
             const res = await getMeLogin();
             setMe(res);
             const h = localStorage.getItem('hermandad_usuario');
-            const herman = await getHermandad(h);
-            setHermandad(herman.data);
+            if (h != null && h != "null"){
+                console.log(h);
+                const herman = await getHermandad(h);
+                setHermandad(herman.data);
+            }
         }
         getMe();
     },[]);

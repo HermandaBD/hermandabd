@@ -33,7 +33,7 @@ export function EventosPage() {
     return (
         <div className="p-5 mx-56 ">
             <button
-                className="bg-indigo-500 text-white px-4 py-2 rounded-lg flex items-center mb-4 hover:bg-indigo-600 transition duration-300"
+                className="bg-sandy text-white px-4 py-2 rounded-lg flex items-center mb-4 hover:bg-burdeos transition duration-300"
                 onClick={() => navigate('/evento')}
             >
                 <FontAwesomeIcon icon={faPlus} className="mr-2" />

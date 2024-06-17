@@ -44,6 +44,7 @@ export const login = async (credentials) => {
 export const getMeLogin = async () => {
     try {
         const response = await authApi.get('/api/v1/users/me');
+        getCurrentUser();
         return response.data;
     } catch (error) {
         console.error("Failed to fetch protected data:", error);
@@ -72,6 +73,7 @@ export const getCurrentUser = async () => {
             setHermandadUsuario(response.data.hermandad);
             setStaff(response.data.is_staff);
             setUserRol(response.data.rol);
+            setSuper(response.data.is_superuser);
         })
         .catch(error => {
             unsetCurrentUser();
@@ -111,11 +113,16 @@ export const setUserRol = userRol => {
     localStorage.setItem("user_rol", userRol);
 }
 
+export const setSuper = superuser => {
+    localStorage.setItem("superuser", superuser);
+}
+
 export const unsetCurrentUser = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user");
     localStorage.removeItem("hermandad_usuario");
     localStorage.removeItem("staff");
+    localStorage.removeItem("superuser");
     localStorage.removeItem("user_rol");
 };
 

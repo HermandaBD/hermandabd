@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { createPago, deletePago, updatePago, getPago } from "../../api/pago.api.js";
+import { createPago, deletePago, updatePago, getPago, generatePDF } from "../../api/pago.api.js";
 import { useEffect, useState } from "react";
 import { getHermanos } from "../../api/hermano.api.js";
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
@@ -62,6 +62,34 @@ export function PagoFormPage() {
         cargarPago();
     }, []);
 
+    const handleGeneratePDF = async (id) => {
+        try {
+            // Llamar a la función para generar el PDF
+            const pdfBlob = await generatePDF(id);
+
+            // Crear un objeto URL del Blob del PDF
+            const blobUrl = URL.createObjectURL(pdfBlob);
+
+            // Crear un enlace invisible para descargar el PDF
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = `cuota_${id}.pdf`; // Nombre del archivo para descargar
+            document.body.appendChild(a);
+
+            // Simular clic en el enlace para iniciar la descarga
+            a.click();
+
+            // Limpiar después de la descarga
+            window.URL.revokeObjectURL(blobUrl);
+            a.remove();
+
+            console.log("PDF generado y descargado exitosamente");
+        } catch (error) {
+            console.error("Error al generar o descargar el PDF:", error);
+        }
+    };
+
     return (
         <div className='max-w-5xl p-10 mx-auto my-5'>
             <div className="flex justify-between">
@@ -114,19 +142,32 @@ export function PagoFormPage() {
                             </select>
                             {errors.hermano && <span className="text-red-500">{errors.hermano.message}<br /></span>}
                         </div>
+                        <div className="col-start-1 col-span-4">
+                            <label htmlFor="diseno">Diseño (Solo para cuotas)</label>
+                            <input type="file" name="diseno" id="diseno" className="border-2 border-black p-3 rounded-lg block w-full my-3"
+                                {...register('diseno')} />
+                            {errors.diseno && <span className="text-red-500">{errors.diseno.message}<br /></span>}
+                        </div>
                     </div>
 
                     <div className='xl:grid grid-cols-6 gap-4'>
                         <button className="bg-burdeos text-white font-bold p-3 rounded-lg block w-full mt-3 col-start-1 col-span-1">Confirmar</button>
-                        {params.id && <button onClick={async () => {
-                            const accepted = window.confirm('¿Estás seguro?');
-                            if (accepted) {
-                                await deletePago(params.id);
-                                navigate("/pagos");
-                            }
-                        }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3 col-start-6 col-span-1">Eliminar</button>}
+                        {params.id && (
+                            <>
+                                <button onClick={() => handleGeneratePDF(params.id)} className="bg-blue-500 text-white font-bold p-3 rounded-lg block w-full mt-3 col-start-3 col-span-2">
+                                    Generar PDF
+                                </button>
+                                <button onClick={async () => {
+                                    const accepted = window.confirm('¿Estás seguro?');
+                                    if (accepted) {
+                                        await deletePago(params.id);
+                                        navigate("/pagos");
+                                    }
+                                }} className="bg-red-500 font-bold p-3 rounded-lg block w-full mt-3 col-start-6 col-span-1">Eliminar</button>
+                            </>)}
                     </div>
                 </form>
+                
             </div>
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <div>
@@ -139,3 +180,4 @@ export function PagoFormPage() {
         </div>
     );
 }
+

@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        'sm': '6rem',
+      },
       colors: {
         burdeos: '#8e1c1c',
         persian: '#bd3534',

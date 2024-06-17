@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [hermandadUsuario, setHermandadUsuario] = useState(null);
     const [isStaff, setIsStaff] = useState(false);
+    const [isSuperuser, setIsSuperuser] = useState(false);
     const [rol, setRol] = useState(''); // GS (Gestor), SE (Secretario), MA (Mayordomo)
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
@@ -17,8 +18,12 @@ const AuthProvider = ({ children }) => {
             setHermandadUsuario(hermandad);
         }
         const staff = localStorage.getItem('staff');
-        if (staff) {
+        if (staff == "true") {
             setIsStaff(true);
+        }
+        const superuser = localStorage.getItem('superuser');
+        if (superuser == "true") {
+            setIsSuperuser(true);
         }
         const userRol = localStorage.getItem('user_rol');
         if (userRol) {
@@ -38,7 +43,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, hermandadUsuario, isStaff, rol, loginAction, logoutAction }}>
+        <AuthContext.Provider value={{ isAuthenticated, hermandadUsuario, isStaff, isSuperuser, rol, loginAction, logoutAction }}>
             {children}
         </AuthContext.Provider>
     );

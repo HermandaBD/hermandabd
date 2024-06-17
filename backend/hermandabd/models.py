@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save, post_delete
+from django.db.models.signals import pre_save, post_delete, post_save
 from django.dispatch import receiver
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import AbstractUser
@@ -86,12 +86,31 @@ class Hermano(models.Model):
 
 
 @receiver(pre_save, sender=Hermano)
-def asignar_numero_hermano(sender, instance, **kwargs):
-    if instance.numero_hermano is None:
-        max_numero = Hermano.objects.filter(hermandad=instance.hermandad).aggregate(
-            models.Max("numero_hermano")
-        )["numero_hermano__max"]
+def manejar_numero_hermano_pre_save(sender, instance, **kwargs):
+    # Obtener el hermano antes de los cambios
+    try:
+        old_instance = Hermano.objects.get(pk=instance.pk)
+    except Hermano.DoesNotExist:
+        old_instance = None
+
+    # Si el hermano está siendo dado de baja (añadir fecha_baja)
+    if instance.fecha_baja and (old_instance is None or old_instance.fecha_baja is None):
+        # Eliminar numero_hermano y actualizar los hermanos con números mayores
+        instance.numero_hermano = None
+        hermanos_a_actualizar = Hermano.objects.filter(hermandad=instance.hermandad, numero_hermano__gt=old_instance.numero_hermano)
+        for hermano in hermanos_a_actualizar:
+            hermano.numero_hermano -= 1
+            hermano.save()
+
+# Señal para gestionar el número de hermano después de guardar
+@receiver(post_save, sender=Hermano)
+def manejar_numero_hermano_post_save(sender, instance, created, **kwargs):
+    # Si el hermano ha sido dado de alta nuevamente (quitar fecha_baja)
+    if not instance.fecha_baja and (created or (instance.fecha_baja is None and instance.numero_hermano is None)):
+        # Asignar nuevo numero_hermano
+        max_numero = Hermano.objects.filter(hermandad=instance.hermandad).aggregate(models.Max('numero_hermano'))['numero_hermano__max']
         instance.numero_hermano = (max_numero or 0) + 1
+        instance.save()
 
 
 @receiver(post_delete, sender=Hermano)
@@ -169,6 +188,7 @@ class PapeletaSitio(models.Model):
     valor = models.DecimalField(max_digits=5, decimal_places=2)
     fecha = models.DateField()
     hora = models.TimeField()
+    diseno = models.FileField(upload_to=path_and_rename, null=True)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     hermano = models.ManyToManyField(Hermano)
 
@@ -192,6 +212,7 @@ class Pago(models.Model):
     descripcion = models.CharField(max_length=500)
     fecha = models.DateField()
     valor = models.DecimalField(max_digits=6, decimal_places=2)
+    diseno = models.FileField(upload_to=path_and_rename, null=True)
     hermandad = models.ForeignKey(Hermandad, on_delete=models.CASCADE)
     hermano = models.ManyToManyField(Hermano)
 
