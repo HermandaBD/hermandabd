@@ -93,17 +93,23 @@ class HermanoSerializer(serializers.ModelSerializer):
             )
         return value
 
-"""     def validate_dni(self, value):
-        REGEXP = "[0-9]{8}[A-Z]"
+    def validate_dni(self, value):
+        REGEXP = r"^\d{8}[A-Z]$"
         DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
-        if (
-            value in INVALIDOS
-            or not re.match(REGEXP, value)
-            or value[8] != DIGITO_CONTROL[int(value[0:8]) % 23]
-        ):
-            raise serializers.ValidationError("El DNI insertado no es válido ")
-        return value """
+
+        if value in INVALIDOS:
+            raise serializers.ValidationError("El DNI insertado es inválido.")
+
+        if not re.match(REGEXP, value):
+            raise serializers.ValidationError("El formato del DNI no es correcto.")
+
+        numero = int(value[:8])
+        letra = value[8]
+        if letra != DIGITO_CONTROL[numero % 23]:
+            raise serializers.ValidationError("La letra del DNI no coincide.")
+
+        return value
 
 
 class EventoSerializer(serializers.ModelSerializer):

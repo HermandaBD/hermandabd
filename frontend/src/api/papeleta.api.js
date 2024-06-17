@@ -38,7 +38,11 @@ export const createPapeleta = async (data) => {
     formData.append('hora', data.hora);
     formData.append('puesto', data.puesto);
     formData.append('valor', data.valor);
-    formData.append('hermano', data.hermano);
+    if (data.hermano && data.hermano.length > 0) {
+        data.hermano.forEach(hermanoId => {
+            formData.append("hermano", hermanoId);
+        });
+    }
     formData.append('hermandad', data.hermandad);
 
     // Verificar si se adjunta un archivo en el campo diseno antes de agregarlo al formData
@@ -95,7 +99,11 @@ export const updatePapeleta = async (id, data) => {
     formData.append('hora', data.hora);
     formData.append('puesto', data.puesto);
     formData.append('valor', data.valor);
-    formData.append('hermano', data.hermano);
+    if (data.hermano && data.hermano.length > 0) {
+        data.hermano.forEach(hermanoId => {
+            formData.append("hermano", hermanoId);
+        });
+    }
     formData.append('hermandad', data.hermandad);
 
     // Verificar si se adjunta un archivo en el campo diseno antes de agregarlo al formData
