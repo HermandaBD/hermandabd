@@ -51,7 +51,7 @@ import { EstadisticasPage } from './pages/Administracion/EstadisticasPage.jsx';
 
 function App() {
   return <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename='/'>
         <div className="min-h-screen flex flex-col">
           <ToastContainer
             position="bottom-right"
