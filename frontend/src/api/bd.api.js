@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from "react-toastify";
 const bdAPI = axios.create({
-    baseURL: 'http://localhost:8000/api/v1'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1'
 })
 
 bdAPI.interceptors.request.use(

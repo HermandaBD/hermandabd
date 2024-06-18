@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const patrimonioApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/patrimonios'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/patrimonios'
 })
 
 patrimonioApi.interceptors.request.use(

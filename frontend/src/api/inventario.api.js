@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const inventarioApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/inventarios'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/inventarios'
 })
 
 inventarioApi.interceptors.request.use(

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const etiquetaApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/etiquetas'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/etiquetas'
 })
 
 etiquetaApi.interceptors.request.use(

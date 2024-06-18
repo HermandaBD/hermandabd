@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const pagoApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/pagos'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/pagos'
 })
 
 pagoApi.interceptors.request.use(

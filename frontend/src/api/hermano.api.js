@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const hermanoApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/hermanos'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/hermanos'
 })
 
 hermanoApi.interceptors.request.use(

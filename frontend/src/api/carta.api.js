@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const cartaApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/cartas'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/cartas'
 })
 
 cartaApi.interceptors.request.use(

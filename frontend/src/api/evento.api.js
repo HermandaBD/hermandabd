@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const eventoApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/eventos'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/eventos'
 })
 
 eventoApi.interceptors.request.use(

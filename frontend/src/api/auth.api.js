@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from "react-toastify";
 const authApi = axios.create({
-    baseURL: 'http://localhost:8000'
+    baseURL: 'https://miguelybarra.pythonanywhere.com'
 })
 
 authApi.interceptors.request.use(

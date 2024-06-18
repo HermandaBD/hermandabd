@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const documentoApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/documentos'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/documentos'
 })
 
 documentoApi.interceptors.request.use(

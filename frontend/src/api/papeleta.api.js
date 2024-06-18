@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const papeletaApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/papeletasitios'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/papeletasitios'
 })
 
 papeletaApi.interceptors.request.use(

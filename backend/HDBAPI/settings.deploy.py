@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-n9(2urli_lfvj5+7u^er=@j3k4$*7l(vz*i888c)9aq(w^48so"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -78,7 +78,7 @@ PROTOCOL = "http"
 DOMAIN = "localhost:3000"
 if not DEBUG:
     PROTOCOL = "https"
-    DOMAIN = "boilerplate.saasitive.com"  # TODO CAMBIAR A URL DE PRODUCCIÓN CUANDO LA TENGAMOS
+    DOMAIN = "hermandabd.netlify.com"  # TODO CAMBIAR A URL DE PRODUCCIÓN CUANDO LA TENGAMOS
 
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
@@ -205,6 +205,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = "/media/"

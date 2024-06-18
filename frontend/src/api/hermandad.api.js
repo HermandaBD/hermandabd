@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const hermandadApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/hermandades'
+    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/hermandades'
 })
 
 hermandadApi.interceptors.request.use(
