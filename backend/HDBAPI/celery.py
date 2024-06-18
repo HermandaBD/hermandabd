@@ -1,4 +1,4 @@
-from __future__ import absolute_import, unicode_literals
+""" from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
 
@@ -11,4 +11,4 @@ app = Celery('hermandabd')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Descubrir tareas en todos los archivos tasks.py en aplicaciones instaladas
-app.autodiscover_tasks()
+app.autodiscover_tasks() """
