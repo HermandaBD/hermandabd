@@ -40,8 +40,16 @@ export function UsuarioHermandadFormPage() {
                 toast.error("Ocurrió un error al asociar");
             }
         } catch (error) {
-            toast.error("Ocurrió un error al asociar el usuario.");
-            console.error("Error al asociar el usuario:", error);
+            if (error.response && error.response.status === 400) {
+                const errors = error.response.data;
+                Object.entries(errors).forEach(([field, message]) => {
+                    setError(field, { type: "manual", message: message });
+                    toast.error(message);
+                });
+            } else {
+                console.error("Error inesperado:", error);
+                toast.error("Error inesperado, por favor intenta nuevamente.");
+            }
         }
     });
 

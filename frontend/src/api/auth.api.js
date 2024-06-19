@@ -17,13 +17,9 @@ authApi.interceptors.request.use(
     }
 );
 export const registerAccount = async (user) => {
-    try {
-        const response = await authApi.post("/api/v1/users/", user);
-        return response;
-    } catch (error) {
-        console.error("Failed to register new user: ", error);
-        return false;
-    }
+    const response = await authApi.post("/api/v1/users/", user);
+    return response;
+
 };
 
 export const login = async (credentials) => {

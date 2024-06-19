@@ -18,7 +18,7 @@ inventarioApi.interceptors.request.use(
 );
 
 export const createInventario = async (inventario) => {
-        return await inventarioApi.post('/', inventario);
+    return await inventarioApi.post('/', inventario);
 };
 
 export const getInventarios = async () => {
@@ -40,9 +40,9 @@ export const getInventario = async (id) => {
 };
 
 export const deleteInventario = async (id) => {
-        return await inventarioApi.delete(`/${id}`);
+    return await inventarioApi.delete(`/${id}`);
 };
 
 export const updateInventario = async (id, inventario) => {
-        return await inventarioApi.put(`/${id}/`, inventario);
+    return await inventarioApi.put(`/${id}/`, inventario);
 }

@@ -50,17 +50,12 @@ export const createPapeleta = async (data) => {
         formData.append('diseno', data.diseno[0]);
     }
 
-    try {
-        const response = await papeletaApi.post('/', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        return response;
-    } catch (error) {
-        console.error('Error al crear la papeleta:', error);
-        throw error; // Puedes manejar el error como prefieras aquí
-    }
+    const response = await papeletaApi.post('/', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response;
 };
 
 export const getPapeletas = async () => {
@@ -82,12 +77,9 @@ export const getPapeleta = async (id) => {
 };
 
 export const deletePapeleta = async (id) => {
-    try {
-        return await papeletaApi.delete(`/${id}`);
-    } catch (error) {
-        console.error("Failed to delete papeleta: ", error);
-        throw error;
-    }
+
+    return await papeletaApi.delete(`/${id}`);
+
 };
 
 export const updatePapeleta = async (id, data) => {
@@ -110,16 +102,11 @@ export const updatePapeleta = async (id, data) => {
     if (data.diseno && data.diseno.length > 0) {
         formData.append('diseno', data.diseno[0]);
     }
-    try {
-        return await papeletaApi.put(`/${id}/`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-    } catch (error) {
-        console.error("Failed to update papeleta: ", error);
-        throw error;
-    }
+    return await papeletaApi.put(`/${id}/`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 
 
 }

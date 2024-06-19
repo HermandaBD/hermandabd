@@ -18,7 +18,7 @@ etiquetaApi.interceptors.request.use(
 );
 
 export const createEtiqueta = async (etiqueta) => {
-        return await etiquetaApi.post('/', etiqueta);
+    return await etiquetaApi.post('/', etiqueta);
 };
 
 export const getEtiquetas = async () => {
@@ -40,7 +40,7 @@ export const getEtiqueta = async (id) => {
 };
 
 export const deleteEtiqueta = async (id) => {
-        return await etiquetaApi.delete(`/${id}`);
+    return await etiquetaApi.delete(`/${id}`);
 };
 
 export const updateEtiqueta = async (id, etiqueta) => {
