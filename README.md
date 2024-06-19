@@ -51,7 +51,7 @@ El servidor debería estar configurado para correr en localhost:8000.
 
 ### 5. Instalar Dependencias de Node
 Regresa al directorio raíz y entra a la carpeta /frontend. Instala los paquetes necesarios:
-
+También dentro de este directorio crea un archivo .env con la variable VITE_API_URL con la url local del backend de django, normalmente http://localhost:8000
 ```bash
 npm install
 ```
@@ -66,6 +66,15 @@ npm run dev
 El servidor debería iniciarse en localhost:3000.
 
 ¡Y ya está! Ahora puedes empezar a usar Hermandabd en tu entorno local.
+
+### Para empezar
+Para probarlo correctamente, hay que crear un superuser django, con este puedes iniciar sesión desde el frontend para acciones reservadas para este rol, como por ejemplo crear una hermandad y asignarla a un usuario existente.
+
+```python
+manage.py createsuperuser
+```
+
+Al crear una cuenta debería llegar al correo (si lo configuración es correcta) de activación de cuenta. 
 
 ### Contribuciones
 Las contribuciones son bienvenidas.

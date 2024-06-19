@@ -78,10 +78,10 @@ PROTOCOL = "http"
 DOMAIN = "localhost:3000"
 if not DEBUG:
     PROTOCOL = "https"
-    DOMAIN = "hermandabd.netlify.com"  # TODO CAMBIAR A URL DE PRODUCCIÓN CUANDO LA TENGAMOS
+    DOMAIN = "hermandabd.netlify.app"  # TODO CAMBIAR A URL DE PRODUCCIÓN CUANDO LA TENGAMOS
 
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+CORS_ALLOWED_ORIGINS = ["https://hermandabd.netlify.app", "https://hermandabd.netlify.app/"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
