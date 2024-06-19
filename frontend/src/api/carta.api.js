@@ -18,12 +18,7 @@ cartaApi.interceptors.request.use(
 );
 
 export const createCarta = async (carta) => {
-    try {
-        return await cartaApi.post('/', carta);
-    } catch (error) {
-        console.error("Failed to create Carta: ", error);
-        throw error;
-    }
+    return await cartaApi.post('/', carta);
 };
 
 export const getCartas = async () => {
@@ -45,21 +40,11 @@ export const getCarta = async (id) => {
 };
 
 export const deleteCarta = async (id) => {
-    try {
-        return await cartaApi.delete(`/${id}`);
-    } catch (error) {
-        console.error("Failed to delete Carta: ", error);
-        throw error;
-    }
+    return await cartaApi.delete(`/${id}`);
 };
 
 export const updateCarta = async (id, carta) => {
-    try {
-        return await cartaApi.put(`/${id}/`, carta);
-    } catch (error) {
-        console.error("Failed to update Carta: ", error);
-        throw error;
-    }
 
+    return await cartaApi.put(`/${id}/`, carta);
 
 }

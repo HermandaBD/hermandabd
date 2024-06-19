@@ -22,13 +22,18 @@ export function RegisterFormPage() {
                 navigate("/"); // TODO mostrar mensaje de que tiene que activar la cuenta comprobando el correo puesto
             }
         } catch (error) {
-            if (error.response && error.response.data.message) {
-                const errorMessage = error.response.data.message;
-                toast.error(errorMessage);
-                console.error(errorMessage);
+            console.log("tiene que llegar");
+            if (error.response && error.response.status === 400) {
+                console.log("aquí");
+                const errors = error.response.data;
+                Object.entries(errors).forEach(([field, message]) => {
+                    setError(field, { type: "manual", message: message });
+                    toast.error(message);
+                });
             } else {
-                toast.error("Ocurrió un error al crear la cuenta.");
-                console.error("Error:", error);
+                console.log("allí");
+                console.error("Error inesperado:", error);
+                toast.error("Error inesperado, por favor intenta nuevamente.");
             }
         }
     });
