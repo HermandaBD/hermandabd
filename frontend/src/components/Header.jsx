@@ -34,7 +34,9 @@ export function Header() {
       {isAuthenticated ? (hermandadUsuario != "null" ?
         (<>
           <div className="flex items-center space-x-4">
-            <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
+            <Link to="/">
+              <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
+            </Link>
             <nav className="flex space-x-4">
               {
                 rol != 'SE' ?
@@ -95,7 +97,10 @@ export function Header() {
         ) : (
           <>
             <div className="flex items-center space-x-4">
-              <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
+              <Link to="/">
+                <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
+              </Link>
+
               <nav className='flex space-x-40'>
                 {
                   isSuperuser ?
@@ -136,8 +141,10 @@ export function Header() {
       ) : (
         <>
           <div className="flex items-center space-x-4">
-            <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
-            <h1>HERMANDABD</h1>
+            <Link to="/" >
+              <img src={profileImage} alt="Hermandad" className="h-10 w-10 rounded-full" />
+            </Link>
+              <h1>HERMANDABD</h1>
           </div>
           <Menu as="div" className="relative inline-block text-left">
             <MenuButton className="flex items-center bg-sandy text-black hover:text-gray-600 rounded-lg px-4 py-2 shadow">
