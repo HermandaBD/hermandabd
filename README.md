@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d54e4c44-ef38-412a-9384-26403bcc8bce/deploy-status)](https://app.netlify.com/sites/hermandabd/deploys)
 # Hermandabd
 
 **Hermandabd** es un software de gestión de hermandades, desarrollado como parte del Trabajo Fin de Grado para el grado de Ingeniería del Software. Con **Hermandabd** puedes gestionar hermanos, pagos, documentos, archivos, patrimonio, cartas papeletas de sitio y más.
