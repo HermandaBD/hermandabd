@@ -11,6 +11,12 @@ export default defineConfig({
         manualChunks: undefined,
       }
     }
+  },
+  server: {
+    port: 3000,
+  },
+  define: {
+    'process.env': process.env
   }
 });
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const cartaApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/cartas'
+    baseURL: `${apiUrl}/api/v1/cartas`
 })
 
 cartaApi.interceptors.request.use(

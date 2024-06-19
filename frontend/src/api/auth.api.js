@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { toast } from "react-toastify";
+const apiUrl = import.meta.env.VITE_API_URL;
 const authApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com'
+    baseURL: apiUrl
 })
 
 authApi.interceptors.request.use(

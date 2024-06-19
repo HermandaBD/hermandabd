@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const hermandadApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/hermandades'
+    baseURL: `${apiUrl}/api/v1/hermandades`
 })
 
 hermandadApi.interceptors.request.use(

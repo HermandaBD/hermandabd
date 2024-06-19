@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const etiquetaApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/etiquetas'
+    baseURL: `${apiUrl}/api/v1/etiquetas`
 })
 
 etiquetaApi.interceptors.request.use(

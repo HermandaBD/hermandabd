@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const pagoApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/pagos'
+    baseURL: `${apiUrl}/api/v1/pagos` 
 })
 
 pagoApi.interceptors.request.use(

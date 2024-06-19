@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const patrimonioApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/patrimonios'
+    baseURL: `${apiUrl}/api/v1/patrimonios`
 })
 
 patrimonioApi.interceptors.request.use(

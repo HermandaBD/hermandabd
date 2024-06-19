@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const documentoApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/documentos'
+    baseURL: `${apiUrl}/api/v1/documentos`
 })
 
 documentoApi.interceptors.request.use(

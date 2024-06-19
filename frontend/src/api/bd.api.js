@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { toast } from "react-toastify";
+const apiUrl = import.meta.env.VITE_API_URL;
 const bdAPI = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1'
+    baseURL: `${apiUrl}/api/v1`
 })
 
 bdAPI.interceptors.request.use(

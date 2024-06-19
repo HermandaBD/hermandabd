@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const eventoApi = axios.create({
-    baseURL: 'https://miguelybarra.pythonanywhere.com/api/v1/eventos'
+    baseURL: `${apiUrl}/api/v1/eventos`
 })
 
 eventoApi.interceptors.request.use(
