@@ -161,3 +161,5 @@ cython_debug/
 
 backend/media/disenos
 backend/media/documentos
+# Local Netlify folder
+.netlify

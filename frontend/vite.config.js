@@ -7,12 +7,17 @@ export default defineConfig({
     manifest: true,
     outDir: 'dist',
     rollupOptions: {
-      input: '/src/main.jsx'
+      output: {
+        manualChunks: undefined,
+      }
     }
   },
   server: {
     port: 3000,
   },
+  define: {
+    'process.env': process.env
+  }
 });
 
 

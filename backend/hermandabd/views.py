@@ -11,7 +11,6 @@ from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 from .forms import CSVUploadForm
-from .tasks import enviar_correo_task
 from reportlab.pdfgen import canvas
 import os
 from django.conf import settings

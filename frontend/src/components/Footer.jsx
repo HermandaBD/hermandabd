@@ -1,5 +1,5 @@
 import React from 'react';
-import profileImage from '../../utils/logoblanco.png'; // Asegúrate de tener la imagen de perfil en tu proyecto
+import profileImage from '/logoblanco.png'; // Asegúrate de tener la imagen de perfil en tu proyecto
 
 function Footer() {
   return (

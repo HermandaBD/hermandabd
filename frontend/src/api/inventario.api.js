@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const inventarioApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/inventarios'
+    baseURL: `${apiUrl}/api/v1/inventarios`
 })
 
 inventarioApi.interceptors.request.use(

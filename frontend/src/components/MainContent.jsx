@@ -19,7 +19,7 @@ function MainContent() {
 
           </div>
           <div className='col-span-1'>
-            <img src='../utils/calendar.png' className="w-72 h-72 mx-auto mb-4 mt-2" />
+            <img src='/calendar.png' className="w-72 h-72 mx-auto mb-4 mt-2" />
           </div>
         </div>
       </div>

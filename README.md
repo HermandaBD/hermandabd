@@ -31,9 +31,10 @@ git clone urlRepositorio
 ### 2. Configurar el Entorno Virtual de Python
 Crea y activa un entorno virtual de Python.
 
-### 3. Instalar Requerimientos de Django
+### 3. Instalar Requerimientos de Django y .env
 Dirígete a la carpeta /backend e instala los requerimientos:
-
+En este directorio crear un archivo .env con las variables GOOGLE_PASSWORD y GOOGLE_USER, donde respectivamente corresponden a contraseña creada para la aplicación y correo de google para hacer los envíos de emails.
+Si no se quiere hacer el envío de correo cambiar en el archivo settings.py la configuración de backend de correo. (La opción de correo por consola está comentada)
 ```bash
 pip install -r requirements.txt
 ```

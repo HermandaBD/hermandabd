@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const apiUrl = import.meta.env.VITE_API_URL;
 const papeletaApi = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/papeletasitios'
+    baseURL: `${apiUrl}/api/v1/papeletasitios`
 })
 
 papeletaApi.interceptors.request.use(

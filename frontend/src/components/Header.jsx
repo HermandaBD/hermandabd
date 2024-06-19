@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { logout } from '../api/auth.api';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext.jsx";
-import profileImage from '../../utils/logo.png';
+import profileImage from '/logo.png';
 import PersonIcon from '@mui/icons-material/Person';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 
